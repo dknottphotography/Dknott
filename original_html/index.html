@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DKNOTT PHOTOGRAPHY</title>
+    
+    <!-- Google Fonts for elegant typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS v3 CDN Setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                bg: '#f1efea',       /* Light beige/off-white background */
+                title: '#9c9185',    /* Dark brownish-grey for titles */
+                subtitle: '#8c8378', /* Slightly darker for subtitle */
+                btnbg: '#6e6257',    /* Brown color for buttons */
+                btnhov: '#544941',   /* Darker brown for hover state */
+                logo: '#651e38',     /* Placeholder maroon background */
+                placeholder: '#d3ccc4' /* Placeholder for gallery images */
+              }
+            },
+            fontFamily: {
+              sans: ['Montserrat', 'sans-serif'],
+              serif: ['Cinzel', 'serif']
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-brand-bg font-sans text-brand-title text-center overflow-x-hidden m-0 p-0">
+
+    <header class="flex w-screen h-[25vh] md:h-[45vh] overflow-hidden">
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_1.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_2.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_3.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_4.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_5.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_6.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style="background-image: url('/img/gallery_7.jpeg');"></div>
+        <div class="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder bg-cover bg-center" style="background-image: url('/img/gallery_8.jpeg');"></div>
+    </header>
+
+    <div class="relative z-10 flex justify-center -mt-[60px] md:-mt-[80px]">
+        <img src="/img/logo.png" alt="D Knott Photography" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full object-cover border-[3px] border-white bg-brand-logo shadow-md hover:scale-105 transition-transform duration-300">
+    </div>
+
+    <main class="px-5 pt-6 pb-12 max-w-[600px] mx-auto">
+        <h1 class="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">DKNOTT PHOTOGRAPHY</h1>
+        <p class="text-[0.65rem] tracking-[2px] leading-relaxed mb-11 font-medium text-brand-subtitle uppercase">DOCUMENTARY WEDDING PHOTOGRAPHY & FILMS. 350+ WEDDINGS ACROSS INDIA & ABROAD.</p>
+
+        <div class="flex flex-col gap-4 items-center">
+            <a href="{{ url_for('contact') }}" class="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">IMAGE LOOP</a>
+            <a href="{{ url_for('wedding_films') }}" class="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEDDING FILMS</a>
+            <a href="{{ url_for('real_weddings') }}" class="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEDDING BLOGS</a>
+            <a href="{{ url_for('home') }}" class="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEBSITE</a>
+            <a href="https://www.instagram.com/dknottphotography" class="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">INSTAGRAM</a>
+        </div>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 backdrop-blur-sm cursor-pointer transition-opacity duration-300">
+        <button class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 z-[110]">&times;</button>
+        <img id="modalImage" src="" alt="Full size image" class="max-h-[90vh] max-w-[95vw] object-contain rounded shadow-2xl scale-95 transition-transform duration-300">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const headerDivs = document.querySelectorAll('header > div');
+            
+            headerDivs.forEach(div => {
+                div.addEventListener('click', () => {
+                    const bg = div.style.backgroundImage;
+                    if (!bg || bg === 'none') return;
+                    
+                    // Extract URL from 'url("...")' or 'url(...)'
+                    const url = bg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+                    
+                    if(url) {
+                        modalImg.src = url;
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
+                        // Small timeout to allow CSS transition to trigger
+                        setTimeout(() => modalImg.classList.replace('scale-95', 'scale-100'), 10);
+                    }
+                });
+            });
+
+            // Close modal when clicking anywhere on it
+            modal.addEventListener('click', () => {
+                modalImg.classList.replace('scale-100', 'scale-95');
+                // Wait for scale transition before hiding
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

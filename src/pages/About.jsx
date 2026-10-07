@@ -1636,7 +1636,7 @@ header.site-nav{
           alt="DKNOTT Photography"
         />
         <div className="ab-hero-content">
-          <h1 className="ab-hero-heading">{settings?.title || 'DKNOTT'} {settings?.description || 'PHOTOGRAPHY'}</h1>
+          <h1 className=\"ab-hero-heading\">{settings?.title || 'DKNOTT PHOTOGRAPHY'}</h1>
         </div>
       </section>
 
@@ -2026,7 +2026,7 @@ header.site-nav{
                 </div>
                 <div>
                   <p style={{ margin: 0, fontSize: '0.85rem', letterSpacing: '0.18em', color: 'var(--parchment)' }}>{settings?.title || 'DKNOTT'}</p>
-                  <p style={{ margin: 0, fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--sage)' }}>{settings?.description || 'PHOTOGRAPHY'}</p>
+                  {(() => { const _t = (settings?.title || 'DKNOTT'); const _d = (settings?.description || 'PHOTOGRAPHY'); return (_d && !_t.toLowerCase().includes(_d.toLowerCase())) ? (<p style={{ margin: 0, fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--sage)' }}>{_d}</p>) : null; })()}
                 </div>
               </div>
               <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--sage)', maxWidth: '32ch' }}>

@@ -66,7 +66,7 @@ export default function Index() {
     </div>
 
     <main className="px-5 pt-6 pb-12 max-w-[600px] mx-auto">
-        <h1 className="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">{`${settings?.title || 'DKNOTT'} ${settings?.description || 'PHOTOGRAPHY'}`.toUpperCase()}</h1>
+        <h1 className="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">{(settings?.title || 'DKNOTT PHOTOGRAPHY').toUpperCase()}</h1>
         <p className="text-[0.65rem] tracking-[2px] leading-relaxed mb-11 font-medium text-brand-subtitle uppercase">{pageData?.tagline || 'DOCUMENTARY WEDDING PHOTOGRAPHY & FILMS. 350+ WEDDINGS ACROSS INDIA & ABROAD.'}</p>
 
         <div className="flex flex-col gap-4 items-center">

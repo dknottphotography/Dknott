@@ -141,47 +141,8 @@ export default defineType({
       type: 'string',
       initialValue: '/wedding_films',
     }),
-    defineField({
-      group: 'films',
-      name: 'weddingFilms',
-      title: 'Wedding Films Carousel',
-      type: 'array',
-      description: 'Films shown in the auto-rotating films carousel. Leave empty to use the built-in list.',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({name: 'title', title: 'Couple Name', type: 'string'}),
-            defineField({name: 'subtitle', title: 'Subtitle', type: 'string'}),
-            defineField({
-              name: 'videoId',
-              title: 'YouTube Video ID',
-              type: 'string',
-              description: 'The 11-character ID from the YouTube URL.',
-            }),
-            defineField({name: 'thumbnail', title: 'Thumbnail Image', type: 'cloudinary.asset'}),
-          ],
-        },
-      ],
-    }),
 
     // ── Showcase & Blog Strips ───────────────────────
-    defineField({
-      group: 'blogs',
-      name: 'showcaseImages',
-      title: 'Showcase Photo Strip',
-      type: 'array',
-      description: 'Photos in the scrolling showcase strip. Leave empty to use the built-in photos.',
-      of: [{type: 'cloudinary.asset'}],
-    }),
-    defineField({
-      group: 'blogs',
-      name: 'blogImages',
-      title: 'Blog Photo Strip',
-      type: 'array',
-      description: 'Photos in the blog slider strip. Leave empty to use the built-in photos.',
-      of: [{type: 'cloudinary.asset'}],
-    }),
     defineField({
       name: 'blogsHeading',
       title: 'Blogs Heading',

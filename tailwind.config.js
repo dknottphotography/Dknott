@@ -19,7 +19,8 @@ export default {
       },
       fontFamily: {
         sans: ['Montserrat', 'sans-serif'],
-        serif: ['Cinzel', 'serif']
+        serif: ['Cinzel', 'serif'],
+        display: ['Fraunces', 'serif']
       },
     },
   },

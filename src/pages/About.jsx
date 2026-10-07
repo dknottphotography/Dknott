@@ -1989,10 +1989,10 @@ header.site-nav{
       </section>
 
       {/* ── FOOTER (standard — same as all other pages) ───── */}
-      <footer style={{ background: 'var(--ink)', color: 'var(--parchment)' }}>
+      <footer style={{ background: 'var(--ink)', color: 'var(--parchment)', paddingTop: '3.5rem', paddingBottom: '1.5rem' }} className="pt-10 pb-4">
         <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0 1.5rem' }}>
           {/* Instagram strip */}
-          <div style={{ marginTop: '3rem', marginBottom: '1rem' }}>
+          <div style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 'clamp(0.75rem,2vw,2rem)' }}>
               {commonImages.instagram.map((img, i) => (
                 <a key={i} href="#" style={{ width: 'clamp(80px,14%,160px)', aspectRatio: '3/4', borderRadius: '4px', overflow: 'hidden', display: 'block' }}>
@@ -2002,10 +2002,14 @@ header.site-nav{
             </div>
           </div>
 
-          {/* Knot wave divider */}
-          <svg className="knot-divider-footer" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0,28 C300,28 420,28 480,28 C520,28 520,8 560,8 C600,8 600,48 640,48 C680,48 680,8 720,8 C750,8 750,28 780,28 C900,28 1200,28 1200,28" />
-          </svg>
+          {/* Main Knot Divider */}
+          <div className="footer-main-knot" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', margin: '2.5rem auto 1.5rem auto' }}>
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--gold)', opacity: 0.35 }} />
+            <svg viewBox="0 0 100 60" width="36" height="24" style={{ margin: '0 1.25rem', overflow: 'visible', flexShrink: 0 }}>
+              <path d="M 30 50 C 15 50 10 40 10 30 C 10 20 15 10 30 10 C 45 10 55 50 70 50 C 85 50 90 40 90 30 C 90 20 85 10 70 10 C 55 10 45 50 30 50 Z" fill="none" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--gold)', opacity: 0.35 }} />
+          </div>
 
           {/* Main grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '2.5rem', marginTop: '2rem' }}>

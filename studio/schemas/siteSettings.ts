@@ -201,6 +201,20 @@ export default defineType({
 
     // ── Footer headings & CTA ────────────────────────────
     defineField({
+      name: 'footerNavLinks',
+      title: 'Footer Navigation Links',
+      type: 'array',
+      group: 'footer',
+      description: 'Links in the footer "Navigate" column. Leave empty to mirror the main navigation.',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({name: 'label', title: 'Label', type: 'string'}),
+          defineField({name: 'href', title: 'Link URL', type: 'string'}),
+        ],
+      }],
+    }),
+    defineField({
       group: 'footer',
       name: 'footerNavHeading',
       title: 'Footer "Navigate" Heading',

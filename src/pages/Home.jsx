@@ -846,7 +846,7 @@ footer.site-footer{
   </svg>
   <div id="splash-text" style={{"marginTop":"25px","textAlign":"center","fontFamily":"var(--sans)","color":"var(--gold)","opacity":"0","transform":"translateY(10px)","transition":"opacity 1s ease-out, transform 1s ease-out"}}>
     <div style={{"letterSpacing":"0.4em","fontSize":"0.85rem","marginBottom":"0.3rem"}}>{siteSettings?.title || 'DKNOTT'}</div>
-    <div style={{"letterSpacing":"0.35em","fontSize":"0.55rem","opacity":"0.75"}}>{siteSettings?.description || 'PHOTOGRAPHY'}</div>
+    {(() => { const _t = (siteSettings?.title || 'DKNOTT'); const _d = (siteSettings?.description || 'PHOTOGRAPHY'); return (_d && !_t.toLowerCase().includes(_d.toLowerCase())) ? (<div style={{"letterSpacing":"0.35em","fontSize":"0.55rem","opacity":"0.75"}}>{_d}</div>) : null; })()}
   </div>
 </div>
 
@@ -1081,7 +1081,7 @@ footer.site-footer{
           </div>
           <div>
             <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{siteSettings?.title || 'DKNOTT'}</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{siteSettings?.description || 'PHOTOGRAPHY'}</p>
+            {(() => { const _t = (siteSettings?.title || 'DKNOTT'); const _d = (siteSettings?.description || 'PHOTOGRAPHY'); return (_d && !_t.toLowerCase().includes(_d.toLowerCase())) ? (<p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{_d}</p>) : null; })()}
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>

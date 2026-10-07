@@ -925,7 +925,7 @@ export default function CandidGallery() {
             onClick={() => setEntered(true)}
             autoFocus
           >
-            step into the darkroom
+            {pageData?.enterLabel || 'step into the darkroom'}
           </button>
         </div>
       )}
@@ -936,14 +936,14 @@ export default function CandidGallery() {
           <div className="cg-serif cg-title-main">{pageData?.title || 'Unrehearsed'}</div>
           <div className="cg-title-sub">{pageData?.description || 'candid photography, still on the reel'}</div>
           <a href={`mailto:${settings?.contactEmail || 'hello@dknott.com'}`} className="cg-byline">
-            Alpha — get in touch
+            {pageData?.contactLabel || 'Alpha \u2014 get in touch'}
           </a>
         </div>
         <div className="cg-controls">
           <div className="cg-hint">
-            drag to look around<br />
-            scroll to move closer<br />
-            click a reel to open it
+            {pageData?.hintDrag || 'drag to look around'}<br />
+            {pageData?.hintScroll || 'scroll to move closer'}<br />
+            {pageData?.hintClick || 'click a reel to open it'}
           </div>
           <div className={`cg-rope-wrap${pulling ? " cg-pulling" : ""}`}>
             <div className="cg-rope" />
@@ -988,7 +988,7 @@ export default function CandidGallery() {
       <div className="cg-category-bar">
         {activeCategory ? (
           <button className="cg-btn active" onClick={goBack}>
-            ← back to the reels
+            {pageData?.backLabel || '\u2190 back to the reels'}
           </button>
         ) : (
           CATEGORIES.map((c) => (
@@ -1015,7 +1015,7 @@ export default function CandidGallery() {
             opacity: 0.5,
           }}
         >
-          loading the darkroom…
+          {pageData?.loadingLabel || 'loading the darkroom\u2026'}
         </div>
       )}
 
@@ -1077,7 +1077,7 @@ export default function CandidGallery() {
               className="cg-lightbox-caption"
               style={{ fontSize: 12, opacity: 0.5, fontStyle: "italic", maxWidth: 360, textAlign: "center" }}
             >
-              a one-line story for this frame goes here — where it was shot, or why it stuck with you
+              {pageData?.storyPlaceholder || 'a one-line story for this frame goes here \u2014 where it was shot, or why it stuck with you'}
             </div>
             <button
               ref={closeBtnRef}
@@ -1087,7 +1087,7 @@ export default function CandidGallery() {
                 setSelectedPhoto(null);
               }}
             >
-              close
+              {pageData?.closeLabel || 'close'}
             </button>
           </div>
 

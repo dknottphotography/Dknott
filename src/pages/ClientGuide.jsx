@@ -774,21 +774,15 @@ footer.site-footer{
     {/*  Instagram Grid  */}
     <div className="mt-12 mb-4">
       <div className="flex justify-center flex-wrap" style={{"gap":"clamp(1rem, 2.5vw, 2.5rem)"}}>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[0])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 1" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[1])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 2" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.heroes.realWeddings)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 3" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[3])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 4" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[4])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 5" />
-        </a>
+        {(settings?.instagramStripImages?.length
+          ? settings.instagramStripImages.map((img) => sanityImg(img))
+          : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
+        ).map((url, i) => (
+          <a key={i} href={"#"} className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+            <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
+          </a>
+        ))}
+      
       </div>
     </div>
     {/* Main Knot Divider */}
@@ -810,8 +804,8 @@ footer.site-footer{
             <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>PHOTOGRAPHY</p>
+            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{settings?.title || 'DKNOTT'}</p>
+            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{settings?.description || 'PHOTOGRAPHY'}</p>
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
@@ -821,9 +815,9 @@ footer.site-footer{
 
       {/*  Navigate  */}
       <div className="md:col-span-4">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerNavHeading || 'Navigate'}</p>
         <ul className="space-y-3 text-sm">
-          {navLinksFrom(settings).map((l) => (
+          {(settings?.footerNavLinks?.length ? settings.footerNavLinks : navLinksFrom(settings)).map((l) => (
             <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
           ))}
         </ul>
@@ -831,7 +825,7 @@ footer.site-footer{
 
       {/*  Contact  */}
       <div className="md:col-span-3">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerStudioHeading || 'Studio'}</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
           <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
           <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
@@ -846,10 +840,10 @@ footer.site-footer{
     {/*  CTA line  */}
     <div className="text-center mt-10">
       <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 3vw, 2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-        Every knot tells a story.<br className="hidden md:block" /> Let's start yours.
+        {settings?.footerCtaLine1 || 'Every knot tells a story.'}<br className="hidden md:block" /> {settings?.footerCtaLine2 || "Let's start yours."}
       </p>
-      <a href="/contact" className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
-        Enquire about your date
+      <a href={settings?.footerCtaHref || "/contact"} className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
+        {settings?.footerCtaButton || 'Enquire about your date'}
       </a>
     </div>
 
@@ -863,7 +857,7 @@ footer.site-footer{
         <a href="#" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.163 0 7.398 2.967 7.398 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
         </a>
-        <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label="Back to top">
+        <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label={settings?.backToTopLabel || "Back to top"}>
           ↑
         </button>
       </div>

@@ -5,15 +5,25 @@ export default defineType({
   title: 'Site Settings',
   type: 'document',
   description: 'Global brand settings applied across the whole website.',
+  groups: [
+    {name: 'brand', title: 'Brand'},
+    {name: 'colors', title: 'Colors & Fonts'},
+    {name: 'nav', title: 'Navigation'},
+    {name: 'footer', title: 'Footer'},
+    {name: 'contact', title: 'Contact & Social'},
+    {name: 'tab', title: 'Browser Tab'},
+  ],
   fields: [
     // ── Brand ────────────────────────────────────────────
     defineField({
+      group: 'brand',
       name: 'title',
       title: 'Site Title',
       type: 'string',
       description: 'MAIN brand title shown in the navigation, page heroes and footer, e.g. DKNOTT.',
     }),
     defineField({
+      group: 'brand',
       name: 'description',
       title: 'Site Description',
       type: 'text',
@@ -21,12 +31,14 @@ export default defineType({
       description: 'Tagline shown under the brand, e.g. PHOTOGRAPHY.',
     }),
     defineField({
+      group: 'brand',
       name: 'logo',
       title: 'Logo Image',
       type: 'cloudinary.asset',
       description: 'Main logo shown in the navigation bar and footer.',
     }),
     defineField({
+      group: 'brand',
       name: 'creamColor',
       title: 'Cream Background Color',
       type: 'string',
@@ -35,6 +47,7 @@ export default defineType({
 
     // ── Colors ───────────────────────────────────────────
     defineField({
+      group: 'colors',
       name: 'primaryColor',
       title: 'Primary Color',
       type: 'string',
@@ -42,6 +55,7 @@ export default defineType({
       initialValue: '#9c9185',
     }),
     defineField({
+      group: 'colors',
       name: 'secondaryColor',
       title: 'Secondary Color',
       type: 'string',
@@ -49,6 +63,7 @@ export default defineType({
       initialValue: '#8c8378',
     }),
     defineField({
+      group: 'colors',
       name: 'accentColor',
       title: 'Accent Color',
       type: 'string',
@@ -56,6 +71,7 @@ export default defineType({
       initialValue: '#B08D4C',
     }),
     defineField({
+      group: 'colors',
       name: 'backgroundColor',
       title: 'Background Color',
       type: 'string',
@@ -63,6 +79,7 @@ export default defineType({
       initialValue: '#F8F3E9',
     }),
     defineField({
+      group: 'colors',
       name: 'textColor',
       title: 'Text Color',
       type: 'string',
@@ -72,6 +89,7 @@ export default defineType({
 
     // ── Fonts ────────────────────────────────────────────
     defineField({
+      group: 'colors',
       name: 'headingFont',
       title: 'Heading Font',
       type: 'string',
@@ -79,6 +97,7 @@ export default defineType({
       initialValue: 'Cinzel',
     }),
     defineField({
+      group: 'colors',
       name: 'bodyFont',
       title: 'Body Font',
       type: 'string',
@@ -88,6 +107,7 @@ export default defineType({
 
     // ── Navigation ───────────────────────────────────────
     defineField({
+      group: 'nav',
       name: 'navLinks',
       title: 'Navigation Links',
       type: 'array',
@@ -105,6 +125,7 @@ export default defineType({
 
     // ── Footer ───────────────────────────────────────────
     defineField({
+      group: 'footer',
       name: 'footerTagline',
       title: 'Footer Tagline',
       type: 'text',
@@ -112,6 +133,7 @@ export default defineType({
       description: 'Short brand line in the footer, e.g. "Documentary wedding photography and film, shot across India."',
     }),
     defineField({
+      group: 'footer',
       name: 'footerText',
       title: 'Footer Bottom Text',
       type: 'string',
@@ -120,18 +142,21 @@ export default defineType({
 
     // ── Contact ──────────────────────────────────────────
     defineField({
+      group: 'contact',
       name: 'contactEmail',
       title: 'Contact Email',
       type: 'string',
       description: 'e.g. dknottphotography3@gmail.com',
     }),
     defineField({
+      group: 'contact',
       name: 'contactPhone',
       title: 'Contact Phone',
       type: 'string',
       description: 'e.g. +91 91107 08256',
     }),
     defineField({
+      group: 'contact',
       name: 'contactAddress',
       title: 'Studio Address',
       type: 'string',
@@ -140,21 +165,25 @@ export default defineType({
 
     // ── Social ───────────────────────────────────────────
     defineField({
+      group: 'contact',
       name: 'instagramUrl',
       title: 'Instagram URL',
       type: 'url',
     }),
     defineField({
+      group: 'contact',
       name: 'facebookUrl',
       title: 'Facebook URL',
       type: 'url',
     }),
     defineField({
+      group: 'contact',
       name: 'youtubeUrl',
       title: 'YouTube URL',
       type: 'url',
     }),
     defineField({
+      group: 'contact',
       name: 'pinterestUrl',
       title: 'Pinterest URL',
       type: 'url',
@@ -162,6 +191,7 @@ export default defineType({
 
     // ── Browser tab ──────────────────────────────────────
     defineField({
+      group: 'tab',
       name: 'browserTabTitle',
       title: 'Browser Tab Title',
       type: 'string',
@@ -171,6 +201,7 @@ export default defineType({
 
     // ── Footer headings & CTA ────────────────────────────
     defineField({
+      group: 'footer',
       name: 'footerNavHeading',
       title: 'Footer "Navigate" Heading',
       type: 'string',
@@ -178,6 +209,7 @@ export default defineType({
       initialValue: 'Navigate',
     }),
     defineField({
+      group: 'footer',
       name: 'footerStudioHeading',
       title: 'Footer "Studio" Heading',
       type: 'string',
@@ -185,6 +217,7 @@ export default defineType({
       initialValue: 'Studio',
     }),
     defineField({
+      group: 'footer',
       name: 'footerCtaLine1',
       title: 'Footer CTA Line 1',
       type: 'string',
@@ -192,6 +225,7 @@ export default defineType({
       initialValue: 'Every knot tells a story.',
     }),
     defineField({
+      group: 'footer',
       name: 'footerCtaLine2',
       title: 'Footer CTA Line 2',
       type: 'string',
@@ -199,6 +233,7 @@ export default defineType({
       initialValue: "Let's start yours.",
     }),
     defineField({
+      group: 'footer',
       name: 'footerCtaButton',
       title: 'Footer CTA Button Label',
       type: 'string',
@@ -206,6 +241,7 @@ export default defineType({
       initialValue: 'Enquire about your date',
     }),
     defineField({
+      group: 'footer',
       name: 'footerCtaHref',
       title: 'Footer CTA Button Link',
       type: 'string',
@@ -213,6 +249,7 @@ export default defineType({
       initialValue: '/contact',
     }),
     defineField({
+      group: 'footer',
       name: 'backToTopLabel',
       title: '"Back to Top" Button Label',
       type: 'string',
@@ -220,6 +257,7 @@ export default defineType({
       initialValue: 'Back to top',
     }),
     defineField({
+      group: 'footer',
       name: 'instagramStripImages',
       title: 'Footer Instagram Strip Photos',
       type: 'array',

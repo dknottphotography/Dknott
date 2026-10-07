@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import * as THREE from "three";
 import { cloudinaryUrl } from "../lib/cloudinary";
 import { commonImages, weddingGalleries } from "../data/images";
-import { client } from "../sanity";
+import { useSanityDoc } from "../lib/useSanityDoc";
 
 /*
   THE DARKROOM
@@ -153,17 +153,15 @@ export default function CandidGallery() {
   
   const [isMobile, setIsMobile] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
-  const [pageData, setPageData] = useState(null);
+  // Universe content from Sanity with built-in fallbacks (never throws).
+  const { data: pageData } = useSanityDoc('universePage');
+  const { data: settings } = useSanityDoc('siteSettings');
+  // Category labels can be renamed in Sanity; layout stays from the built-in table.
+  const catLabel = (c) => pageData?.categories?.find((sc) => (sc.id || sc.title || '').toLowerCase() === c.id)?.title || c.label;
   
   const mutedRef = useRef(false);
   const isMobileRef = useRef(false);
   const theme = THEMES[themeName];
-
-  useEffect(() => {
-    client.fetch('*[_type == "universePage"][0]').then(data => {
-      setPageData(data);
-    }).catch(console.error);
-  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -937,7 +935,7 @@ export default function CandidGallery() {
         <div className="cg-title-stack">
           <div className="cg-serif cg-title-main">{pageData?.title || 'Unrehearsed'}</div>
           <div className="cg-title-sub">{pageData?.description || 'candid photography, still on the reel'}</div>
-          <a href="mailto:hello@dknott.com" className="cg-byline">
+          <a href={`mailto:${settings?.contactEmail || 'hello@dknott.com'}`} className="cg-byline">
             Alpha — get in touch
           </a>
         </div>
@@ -999,7 +997,7 @@ export default function CandidGallery() {
               className={`cg-btn${activeCategory === c.id ? " active" : ""}`}
               onClick={() => pick(c.id)}
             >
-              {c.label}
+              {catLabel(c)}
             </button>
           ))
         )}

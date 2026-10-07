@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { cloudinaryUrl, handleImageError } from '../lib/cloudinary';
 import { commonImages, weddingGalleries } from '../data/images';
+import { useSanityDoc } from '../lib/useSanityDoc';
+import { sanityImg } from '../lib/sanityContent';
 
 export default function Index() {
+  const { data: settings } = useSanityDoc('siteSettings');
   useEffect(() => {
     if (window.__IndexScriptLoaded) return;
     window.__IndexScriptLoaded = true;
@@ -63,11 +66,11 @@ export default function Index() {
     </header>
 
     <div className="relative z-10 flex justify-center -mt-[60px] md:-mt-[80px]">
-        <img src={cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="D Knott Photography" className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full object-cover border-[3px] border-white bg-brand-logo shadow-md hover:scale-105 transition-transform duration-300" />
+        <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="D Knott Photography" className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full object-cover border-[3px] border-white bg-brand-logo shadow-md hover:scale-105 transition-transform duration-300" />
     </div>
 
     <main className="px-5 pt-6 pb-12 max-w-[600px] mx-auto">
-        <h1 className="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">DKNOTT PHOTOGRAPHY</h1>
+        <h1 className="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">{settings?.title ? `${settings.title} PHOTOGRAPHY`.toUpperCase() : 'DKNOTT PHOTOGRAPHY'}</h1>
         <p className="text-[0.65rem] tracking-[2px] leading-relaxed mb-11 font-medium text-brand-subtitle uppercase">DOCUMENTARY WEDDING PHOTOGRAPHY & FILMS. 350+ WEDDINGS ACROSS INDIA & ABROAD.</p>
 
         <div className="flex flex-col gap-4 items-center">
@@ -76,7 +79,7 @@ export default function Index() {
             <a href="/wedding_films" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEDDING FILMS</a>
             <a href="/real_weddings" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEDDING BLOGS</a>
             <a href="/home" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEBSITE</a>
-            <a href="https://www.instagram.com/dknottphotography" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">INSTAGRAM</a>
+            <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">INSTAGRAM</a>
         </div>
     </main>
 

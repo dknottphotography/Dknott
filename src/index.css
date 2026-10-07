@@ -4,3 +4,15 @@
 @tailwind utilities;
 
 /* The HTML files already contain their respective CSS directly in a <style> block, so no global custom CSS is needed besides Tailwind */
+
+/* Brand theme defaults — the Sanity-driven SiteTheme in App.jsx overrides
+   these on :root when siteSettings values exist. */
+:root {
+  --brand-primary: #9c9185;
+  --brand-secondary: #8c8378;
+  --brand-accent: #B08D4C;
+  --brand-bg: #F8F3E9;
+  --brand-text: #262019;
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Montserrat', sans-serif;
+}

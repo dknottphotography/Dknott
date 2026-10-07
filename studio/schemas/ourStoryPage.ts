@@ -161,5 +161,23 @@ export default defineType({
       type: 'url',
       initialValue: 'https://instagram.com/dknottphotography',
     }),
+
+    // ── 12-Year Lessons (Pillars) ──────────────────────────
+    defineField({
+      name: 'pillars',
+      title: '"Lessons From The Craft" Pillars',
+      type: 'array',
+      description: 'The four numbered pillar cards. Leave empty to use the built-in lessons.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({name: 'num', title: 'Number (e.g. 01)', type: 'string'}),
+            defineField({name: 'title', title: 'Title', type: 'string'}),
+            defineField({name: 'body', title: 'Body', type: 'text', rows: 3}),
+          ],
+        },
+      ],
+    }),
   ],
 })

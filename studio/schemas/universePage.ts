@@ -7,22 +7,47 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Page Title',
       type: 'string',
-      description: 'e.g. UNREHEARSED',
+      description: 'e.g. Unrehearsed',
+      initialValue: 'Unrehearsed',
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Subtitle',
       type: 'text',
+      rows: 2,
+      description: 'e.g. candid photography, still on the reel',
+      initialValue: 'candid photography, still on the reel',
     }),
     defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
-      of: [{type: 'string'}],
-      description: 'e.g. Street, Nature, Portrait',
+      description:
+        'Renames the Universe reels (Street / Nature / Portrait). The "id" must stay one of: street, nature, portrait — only change the display title. Leave the array empty to keep the built-in labels.',
+      of: [
+        defineField({
+          name: 'category',
+          title: 'Category',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'id',
+              title: 'Category ID',
+              type: 'string',
+              description: 'Must be street, nature or portrait.',
+              options: {list: ['street', 'nature', 'portrait']},
+            }),
+            defineField({
+              name: 'title',
+              title: 'Display Title',
+              type: 'string',
+              description: 'e.g. Street',
+            }),
+          ],
+        }),
+      ],
     }),
   ],
 })
-

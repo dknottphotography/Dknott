@@ -5,6 +5,8 @@ import universePage from './universePage'
 import realWedding from './realWedding'
 import ourStoryPage from './ourStoryPage'
 import aboutPage from './aboutPage'
+import weddingFilmsPage from './weddingFilmsPage'
+import clientGuidePage from './clientGuidePage'
 
 export const schemaTypes = [
   siteSettings,
@@ -14,5 +16,6 @@ export const schemaTypes = [
   realWedding,
   ourStoryPage,
   aboutPage,
+  weddingFilmsPage,
+  clientGuidePage,
 ]
-

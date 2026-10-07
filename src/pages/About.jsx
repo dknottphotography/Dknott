@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { cloudinaryUrl, handleImageError } from '../lib/cloudinary';
 import { commonImages, weddingGalleries } from '../data/images';
 import { client } from '../sanity';
+import { useSanityDoc } from '../lib/useSanityDoc';
+import { sanityImg } from '../lib/sanityContent';
+import { navLinksFrom, isActiveLink } from '../lib/siteContent';
 
 /* ─── Default Testimonials ──────────────────────────────── */
 const DEFAULT_NOTES = [
@@ -121,6 +124,7 @@ const DEFAULT_FILMS = [
 
 export default function About() {
   const [pageData, setPageData] = useState(null);
+  const { data: settings } = useSanityDoc('siteSettings');
   const [noteIdx,  setNoteIdx]  = useState(0);
   const [isPausedNotes, setIsPausedNotes] = useState(false);
   const [filmIdx,  setFilmIdx]  = useState(0);
@@ -1604,16 +1608,12 @@ header.site-nav{
       <header className="site-nav">
         <div className="wrap nav-row">
           <a href="/home" className="logo" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
+            <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
           </a>
           <nav className="nav-links">
-            <a href="/home">Home</a>
-            <a href="/our_story">Our Story</a>
-            <a href="/about" className="active">About</a>
-            <a href="/wedding_films">Wedding Films</a>
-            <a href="/real_weddings">Real Weddings</a>
-            <a href="/client_guide">Client Guide</a>
-            <a href="/contact">Contact</a>
+            {navLinksFrom(settings).map((l) => (
+              <a key={l.href} href={l.href} className={isActiveLink(l.href, '/about') ? 'active' : undefined}>{l.label}</a>
+            ))}
           </nav>
           <div className="nav-cta">
             <button className="nav-toggle" aria-label="Menu">
@@ -2017,23 +2017,23 @@ header.site-nav{
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
                 <div style={{ width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', background: 'var(--paper)', border: '1px solid rgba(199,163,105,0.3)', flexShrink: 0 }}>
-                  <img src={cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: '0.85rem', letterSpacing: '0.18em', color: 'var(--parchment)' }}>DKNOTT</p>
-                  <p style={{ margin: 0, fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--sage)' }}>PHOTOGRAPHY</p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', letterSpacing: '0.18em', color: 'var(--parchment)' }}>{settings?.title || 'DKNOTT'}</p>
+                  <p style={{ margin: 0, fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--sage)' }}>{settings?.description || 'PHOTOGRAPHY'}</p>
                 </div>
               </div>
               <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--sage)', maxWidth: '32ch' }}>
-                Documentary wedding photography and film, shot across India — quiet moments, kept honestly.
+                {settings?.footerTagline || 'Documentary wedding photography and film, shot across India — quiet moments, kept honestly.'}
               </p>
             </div>
             {/* Navigate */}
             <div>
               <p style={{ margin: '0 0 1.25rem', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>Navigate</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.88rem' }}>
-                {[['Home','/home'],['About','/about'],['Our Story','/our_story'],['Wedding Films','/wedding_films'],['Real Weddings','/real_weddings'],['Client Guide','/client_guide'],["Let's connect",'/contact']].map(([label, href]) => (
-                  <li key={href}><a href={href} className="grain-link" style={{ color: 'var(--parchment)' }}>{label}</a></li>
+                {navLinksFrom(settings).map((l) => (
+                  <li key={l.href}><a href={l.href} className="grain-link" style={{ color: 'var(--parchment)' }}>{l.label}</a></li>
                 ))}
               </ul>
             </div>
@@ -2041,9 +2041,9 @@ header.site-nav{
             <div>
               <p style={{ margin: '0 0 1.25rem', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>Studio</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.88rem', color: 'var(--parchment)' }}>
-                <li>Hyderabad, India</li>
-                <li>dknottphotography3@gmail.com</li>
-                <li>+91 91107 08256</li>
+                <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
+                <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
+                <li>{settings?.contactPhone || '+91 91107 08256'}</li>
               </ul>
             </div>
           </div>
@@ -2060,9 +2060,9 @@ header.site-nav{
 
           {/* Bottom bar */}
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', marginTop: '2.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(199,163,105,0.15)' }}>
-            <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--sage)' }}>© {new Date().getFullYear()} DKNOTT Photography. All rights reserved.</p>
+            <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--sage)' }}>© {new Date().getFullYear()} {settings?.footerText || 'DKNOTT Photography. All rights reserved.'}</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <a href="https://www.instagram.com/dknottphotography" aria-label="Instagram" style={{ color: 'var(--parchment)', opacity: 0.8 }}>
+              <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} aria-label="Instagram" style={{ color: 'var(--parchment)', opacity: 0.8 }}>
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
                 </svg>

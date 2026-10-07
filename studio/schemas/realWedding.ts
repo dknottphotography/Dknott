@@ -12,6 +12,24 @@ export default defineType({
       description: 'e.g. John & Jane',
     }),
     defineField({
+      name: 'slug',
+      title: 'URL Slug',
+      type: 'string',
+      description: 'Used in ?open= links, e.g. anuhya-abhinav. Lowercase, no spaces.',
+    }),
+    defineField({
+      name: 'location',
+      title: 'Location',
+      type: 'string',
+      description: 'e.g. India',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
       name: 'category',
       title: 'Category',
       type: 'string',
@@ -36,4 +54,3 @@ export default defineType({
     }),
   ],
 })
-

@@ -3,7 +3,7 @@ import {structureTool} from 'sanity/structure'
 import {cloudinarySchemaPlugin} from 'sanity-plugin-cloudinary'
 import {schemaTypes} from './schemas'
 
-const SINGLETONS = ['siteSettings', 'homePage', 'contactPage', 'universePage', 'ourStoryPage', 'aboutPage']
+const SINGLETONS = ['siteSettings', 'homePage', 'contactPage', 'universePage', 'ourStoryPage', 'aboutPage', 'weddingFilmsPage', 'clientGuidePage']
 
 export default defineConfig({
   name: 'default',
@@ -37,6 +37,12 @@ export default defineConfig({
             S.listItem()
               .title('Universe Page')
               .child(S.document().schemaType('universePage').documentId('universePage')),
+            S.listItem()
+              .title('Wedding Films Page')
+              .child(S.document().schemaType('weddingFilmsPage').documentId('weddingFilmsPage')),
+            S.listItem()
+              .title('Client Guide Page')
+              .child(S.document().schemaType('clientGuidePage').documentId('clientGuidePage')),
             S.divider(),
             ...S.documentTypeListItems().filter(
               (listItem) => !SINGLETONS.includes(listItem.getId() as string)

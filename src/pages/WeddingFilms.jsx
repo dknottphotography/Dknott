@@ -1,9 +1,138 @@
 import React, { useEffect, useRef } from 'react';
 import { cloudinaryUrl, handleImageError } from '../lib/cloudinary';
 import { commonImages, weddingGalleries } from '../data/images';
+import { useSanityDoc } from '../lib/useSanityDoc';
+import { sanityImg } from '../lib/sanityContent';
+import { navLinksFrom, isActiveLink } from '../lib/siteContent';
+
+/* Built-in film list (used when Sanity has no films yet). */
+const FILMS = [
+  {
+    category: "wedding",
+    videoId: "Yv0VLdyL48A",
+    couple: "Ellen & Yashwanth",
+    tagline: "A Story of Love, Family & Forever"
+  },
+  {
+    category: "wedding",
+    videoId: "9MEn1gGmhSk",
+    couple: "Keerthana & Rohit",
+    tagline: "A Beautiful Story"
+  },
+  {
+    category: "wedding",
+    videoId: "n-vDqrvE3pE",
+    couple: "Shagufta & Fakruddin",
+    tagline: "A Tale of Two Hearts"
+  },
+  {
+    category: "wedding",
+    videoId: "h_29GN4KmGA",
+    couple: "Manasa & Gokul",
+    tagline: "A Lifetime of Love"
+  },
+  {
+    category: "wedding",
+    videoId: "t7uP9MAi95w",
+    couple: "",
+    tagline: "Eternity Begins Here"
+  },
+  {
+    category: "wedding",
+    videoId: "FTMGzM3a_bQ",
+    couple: "Manasa & Satya",
+    tagline: "A Magical Journey"
+  },
+  {
+    category: "wedding",
+    videoId: "MU8-UZqwLbg",
+    couple: "Ellen & Yashwanth",
+    tagline: "Two Souls, One Destiny"
+  },
+  {
+    category: "wedding",
+    videoId: "yBdqMz6HGdQ",
+    couple: "Deepthi & Sridhar",
+    tagline: "The Promise of Forever"
+  },
+  {
+    category: "wedding",
+    videoId: "6hxO16zNFt8",
+    couple: "Babitha & Aashish",
+    tagline: "A Symphony of Love"
+  },
+  {
+    category: "wedding",
+    videoId: "B0LxWgSVmDk",
+    couple: "Likita & Sowrab",
+    tagline: "Timeless Memories"
+  },
+  {
+    category: "wedding",
+    videoId: "fwgTuWTTo6A",
+    couple: "Manisha & Vinay",
+    tagline: "A New Chapter Begins"
+  },
+  {
+    category: "wedding",
+    videoId: "ACUqAGBVDfE",
+    couple: "Manisha & Vinay",
+    tagline: "Written in the Stars"
+  },
+  {
+    category: "wedding",
+    videoId: "ERexGO78QMQ",
+    couple: "Shagufta & Fakruddin",
+    tagline: "A Love Like No Other"
+  },
+  {
+    category: "wedding",
+    videoId: "087tG7pcFRI",
+    couple: "Manisha & Vinay",
+    tagline: "Our Forever Starts Now"
+  },
+  {
+    category: "wedding",
+    videoId: "6iwa4bN6fBM",
+    couple: "Gayathri The Bride",
+    tagline: "A Cinematic Fairytale"
+  }
+];
+
+/* Single film section — preserves the alternating light/dark editorial look. */
+function FilmSection({ film, index }) {
+  const light = index % 2 === 0;
+  const playFilm = (e) => {
+    const el = e.currentTarget;
+    if (el.querySelector('iframe')) return;
+    const videoId = el.getAttribute('data-video-id');
+    el.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+    el.style.cursor = 'default';
+  };
+  return (
+    <section data-tags={film.category || 'wedding'} style={{"backgroundColor": light ? "var(--paper)" : "#35322F", "padding":"5rem 0"}}>
+      <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
+        <div className="video-placeholder" data-video-id={film.videoId} onClick={playFilm} style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
+          <img src={'https://img.youtube.com/vi/' + film.videoId + '/maxresdefault.jpg'} alt={film.couple || 'Film'} style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onMouseOver={(e) => e.currentTarget.style.filter='brightness(1)'} onMouseOut={(e) => e.currentTarget.style.filter='brightness(0.8)'} />
+          <div className="video-play-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <polygon points="7,4 19,12 7,20" fill="currentColor" />
+            </svg>
+          </div>
+        </div>
+        <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>{film.couple}</h2>
+        <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>{film.tagline}</p>
+      </div>
+    </section>
+  );
+}
 
 export default function WeddingFilms() {
   const videoRef = useRef(null);
+  const { data } = useSanityDoc('weddingFilmsPage');
+  const { data: settings } = useSanityDoc('siteSettings');
+  // Films from Sanity (weddingFilmsPage.films) with built-in fallback.
+  const films = (data?.films && data.films.length) ? data.films : FILMS;
 
   useEffect(() => {
     if (videoRef.current) {
@@ -744,16 +873,12 @@ footer.site-footer{
 <header className="site-nav">
   <div className="wrap nav-row">
     <a href="/home" className="logo" style={{"display":"flex","alignItems":"center"}}>
-      <img src={cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
+      <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
     </a>
     <nav className="nav-links">
-      <a href="/home">Home</a>
-      <a href="/about">About</a>
-      <a href="/our_story">Our Story</a>
-      <a href="/wedding_films" className="active">Wedding Films</a>
-      <a href="/real_weddings">Real Weddings</a>
-      <a href="/client_guide">Client Guide</a>
-      <a href="/contact">Contact</a>
+      {navLinksFrom(settings).map((l) => (
+        <a key={l.href} href={l.href} className={isActiveLink(l.href, '/wedding_films') ? 'active' : undefined}>{l.label}</a>
+      ))}
     </nav>
     <div className="nav-cta">
       <button className="nav-toggle" aria-label="Menu">
@@ -771,12 +896,12 @@ footer.site-footer{
     muted
     playsInline
     preload="auto"
-    src="https://res.cloudinary.com/ddcwf9ji/video/upload/v1790513777/ENGAGEMENT_REEL___Dknottphotography.mp4"
+    src={sanityImg(data?.heroVideo) || "https://res.cloudinary.com/ddcwf9ji/video/upload/v1790513777/ENGAGEMENT_REEL___Dknottphotography.mp4"}
     className="films-hero-video"
   />
   <div style={{ position: "relative", zIndex: 3, textAlign: "center", color: "white", paddingTop: "80px", textShadow: "0 4px 18px rgba(0,0,0,0.8), 0 0 35px rgba(0,0,0,0.6)", paddingLeft: "1.25rem", paddingRight: "1.25rem" }}>
-    <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", fontFamily: "var(--serif)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.8rem", color: "white" }}>Wedding Films</h1>
-    <p style={{ fontFamily: "var(--sans)", fontSize: "clamp(0.85rem, 1.8vw, 0.95rem)", letterSpacing: "0.2em", textTransform: "uppercase", color: "#DFBB7B" }}>Films that sound like your wedding</p>
+    <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", fontFamily: "var(--serif)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.8rem", color: "white" }}>{data?.heroHeading || 'Wedding Films'}</h1>
+    <p style={{ fontFamily: "var(--sans)", fontSize: "clamp(0.85rem, 1.8vw, 0.95rem)", letterSpacing: "0.2em", textTransform: "uppercase", color: "#DFBB7B" }}>{data?.heroSubheading || 'Films that sound like your wedding'}</p>
   </div>
 </section>
 
@@ -791,247 +916,10 @@ footer.site-footer{
   </div>
 </section>
 
-{/*  Film 1 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="Yv0VLdyL48A" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/Yv0VLdyL48A/maxresdefault.jpg" alt="Film 1" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Ellen & Yashwanth</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>A Story of Love, Family & Forever</p>
-  </div>
-</section>
-
-{/*  Film 2 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="9MEn1gGmhSk" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/9MEn1gGmhSk/maxresdefault.jpg" alt="Film 2" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Keerthana & Rohit</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>A Beautiful Story</p>
-  </div>
-</section>
-
-{/*  Film 3 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="n-vDqrvE3pE" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/n-vDqrvE3pE/maxresdefault.jpg" alt="Film 3" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Shagufta & Fakruddin</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>A Tale of Two Hearts</p>
-  </div>
-</section>
-
-{/*  Film 4 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="h_29GN4KmGA" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/h_29GN4KmGA/maxresdefault.jpg" alt="Film 4" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Manasa & Gokul</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>A Lifetime of Love</p>
-  </div>
-</section>
-
-{/*  Film 5 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="t7uP9MAi95w" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/t7uP9MAi95w/maxresdefault.jpg" alt="Film 5" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}></h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>Eternity Begins Here</p>
-  </div>
-</section>
-
-{/*  Film 6 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="FTMGzM3a_bQ" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/FTMGzM3a_bQ/maxresdefault.jpg" alt="Film 6" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Manasa & Satya</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>A Magical Journey</p>
-  </div>
-</section>
-
-{/*  Film 7 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="MU8-UZqwLbg" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/MU8-UZqwLbg/maxresdefault.jpg" alt="Film 7" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Ellen & Yashwanth</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>Two Souls, One Destiny</p>
-  </div>
-</section>
-
-{/*  Film 8 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="yBdqMz6HGdQ" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/yBdqMz6HGdQ/hqdefault.jpg" alt="Film 8" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Deepthi & Sridhar</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>The Promise of Forever</p>
-  </div>
-</section>
-
-{/*  Film 9 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="6hxO16zNFt8" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/6hxO16zNFt8/maxresdefault.jpg" alt="Film 9" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Babitha & Aashish</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>A Symphony of Love</p>
-  </div>
-</section>
-
-{/*  Film 10 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="B0LxWgSVmDk" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/B0LxWgSVmDk/maxresdefault.jpg" alt="Film 10" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Likita & Sowrab</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>Timeless Memories</p>
-  </div>
-</section>
-
-{/*  Film 11 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="fwgTuWTTo6A" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/fwgTuWTTo6A/maxresdefault.jpg" alt="Film 11" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Manisha & Vinay</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>A New Chapter Begins</p>
-  </div>
-</section>
-
-{/*  Film 12 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="ACUqAGBVDfE" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/ACUqAGBVDfE/maxresdefault.jpg" alt="Film 12" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Manisha & Vinay</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>Written in the Stars</p>
-  </div>
-</section>
-
-{/*  Film 13 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="ERexGO78QMQ" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/ERexGO78QMQ/maxresdefault.jpg" alt="Film 13" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Shagufta & Fakruddin</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>A Love Like No Other</p>
-  </div>
-</section>
-
-{/*  Film 14 (Dark)  */}
-<section data-tags="wedding" style={{"backgroundColor":"#35322F","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="087tG7pcFRI" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/087tG7pcFRI/maxresdefault.jpg" alt="Film 14" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Manisha & Vinay</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--paper-deep)"}}>Our Forever Starts Now</p>
-  </div>
-</section>
-
-{/*  Film 15 (Light)  */}
-<section data-tags="wedding" style={{"backgroundColor":"var(--paper)","padding":"5rem 0"}}>
-  <div className="wrap reveal" style={{"maxWidth":"900px","margin":"0 auto","textAlign":"center"}}>
-    <div className="video-placeholder" data-video-id="6iwa4bN6fBM" style={{"position":"relative","marginBottom":"2rem","overflow":"hidden","paddingBottom":"56.25%","height":"0","cursor":"pointer","backgroundColor":"#000"}}>
-      <img src="https://img.youtube.com/vi/6iwa4bN6fBM/maxresdefault.jpg" alt="Film 15" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","filter":"brightness(0.8)","transition":"filter 0.3s"}} onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(0.8)'" />
-      <div className="video-play-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="7,4 19,12 7,20" fill="currentColor" />
-        </svg>
-      </div>
-    </div>
-    <h2 style={{"fontFamily":"var(--serif)","fontSize":"2.2rem","color":"var(--gold)","marginBottom":"0.5rem"}}>Gayathri The Bride</h2>
-    <p style={{"fontFamily":"var(--sans)","fontSize":"0.8rem","letterSpacing":"0.15em","textTransform":"uppercase","color":"var(--ink-soft)"}}>A Cinematic Fairytale</p>
-  </div>
-</section>
-
-
+{/* Films — from Sanity (weddingFilmsPage.films) with built-in fallback */}
+{films.map((film, i) => (
+  <FilmSection key={film.videoId || i} film={film} index={i} />
+))}
 
 
 
@@ -1074,15 +962,15 @@ footer.site-footer{
       <div className="md:col-span-5">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden" style={{"background":"var(--paper)","border":"1px solid rgba(199,163,105,0.3)"}}>
-            <img src={cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
+            <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>PHOTOGRAPHY</p>
+            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{settings?.title || 'DKNOTT'}</p>
+            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{settings?.description || 'PHOTOGRAPHY'}</p>
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
-          Documentary wedding photography and film, shot across India — quiet moments, kept honestly.
+          {settings?.footerTagline || 'Documentary wedding photography and film, shot across India — quiet moments, kept honestly.'}
         </p>
       </div>
 
@@ -1090,13 +978,9 @@ footer.site-footer{
       <div className="md:col-span-4">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
         <ul className="space-y-3 text-sm">
-          <li><a href="/home" className="grain-link" style={{"color":"var(--parchment)"}}>Home</a></li>
-          <li><a href="/about" className="grain-link" style={{"color":"var(--parchment)"}}>About</a></li>
-          <li><a href="/our_story" className="grain-link" style={{"color":"var(--parchment)"}}>Our story</a></li>
-          <li><a href="/wedding_films" className="grain-link" style={{"color":"var(--parchment)"}}>Wedding films</a></li>
-          <li><a href="/real_weddings" className="grain-link" style={{"color":"var(--parchment)"}}>Real weddings</a></li>
-          <li><a href="/client_guide" className="grain-link" style={{"color":"var(--parchment)"}}>Client guide</a></li>
-          <li><a href="/contact" className="grain-link" style={{"color":"var(--parchment)"}}>Let's connect</a></li>
+          {navLinksFrom(settings).map((l) => (
+            <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
+          ))}
         </ul>
       </div>
 
@@ -1104,9 +988,9 @@ footer.site-footer{
       <div className="md:col-span-3">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
-          <li>Hyderabad, India</li>
-          <li>dknottphotography3@gmail.com</li>
-          <li>+91 91107 08256</li>
+          <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
+          <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
+          <li>{settings?.contactPhone || '+91 91107 08256'}</li>
         </ul>
       </div>
 
@@ -1126,12 +1010,12 @@ footer.site-footer{
 
     {/*  Bottom bar  */}
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10 pt-4" style={{"borderTop":"1px solid rgba(199,163,105,0.15)"}}>
-      <p className="text-xs" style={{"color":"var(--sage)"}}>© 2026 DKNOTT Photography. All rights reserved.</p>
+      <p className="text-xs" style={{"color":"var(--sage)"}}>{settings?.footerText || '© 2026 DKNOTT Photography. All rights reserved.'}</p>
       <div className="flex items-center gap-6">
-         <a href="https://www.instagram.com/dknottphotography" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Instagram">
+         <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Instagram">
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         </a>
-        <a href="https://www.pinterest.com/dknottphotography" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
+        <a href={settings?.pinterestUrl || 'https://www.pinterest.com/dknottphotography'} className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.163 0 7.398 2.967 7.398 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
         </a>
         <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label="Back to top">

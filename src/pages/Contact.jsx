@@ -1133,7 +1133,7 @@ footer.site-footer{
           </div>
           <div>
             <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{settings?.title || 'DKNOTT'}</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{settings?.description || 'PHOTOGRAPHY'}</p>
+            {(() => { const _t = (settings?.title || 'DKNOTT'); const _d = (settings?.description || 'PHOTOGRAPHY'); return (_d && !_t.toLowerCase().includes(_d.toLowerCase())) ? (<p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{_d}</p>) : null; })()}
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>

@@ -192,6 +192,7 @@ const WeddingCard = ({ wedding, isVisible, onOpen }) => {
 export default function RealWeddings() {
   const [weddings, setWeddings] = useState(weddingGalleries);
   const { data: settings } = useSanityDoc('siteSettings');
+  const { data: pageData } = useSanityDoc('realWeddingsPage');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedWedding, setSelectedWedding] = useState(null);
   const [galleryData, setGalleryData] = useState({});
@@ -972,7 +973,7 @@ footer.site-footer{
 
 <section className="relative w-full overflow-hidden flex items-center h-[65vh] min-h-[480px] md:h-[75vh] md:min-h-[580px] lg:h-[82vh] lg:min-h-[640px] pt-28 md:pt-36 pb-12 md:pb-16">
   <img
-    src={cloudinaryUrl(commonImages.heroes.realWeddings || 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790350983/_ANV9169_1.jpg')}
+    src={sanityImg(pageData?.heroImage) || cloudinaryUrl(commonImages.heroes.realWeddings || 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790350983/_ANV9169_1.jpg')}
     onError={handleImageError}
     alt="Real Weddings Hero"
     className="rw-hero-img absolute inset-0 w-full h-full object-cover object-[88%_center] md:object-center brightness-[0.9] z-0 transition-all duration-300"
@@ -980,8 +981,8 @@ footer.site-footer{
   <div className="absolute top-0 left-0 right-0 h-28 md:h-36 bg-gradient-to-b from-black/50 via-black/15 to-transparent z-[1] pointer-events-none" />
   <div className="wrap relative z-10 w-full" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.6)' }}>
     <div className="max-w-md lg:max-w-lg">
-      <span className="eyebrow" style={{ color: 'white', borderColor: 'white' }}>Real Weddings</span>
-      <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.4rem)', color: '#ffffff' }}>Stories, not just galleries.</h1>
+      <span className="eyebrow" style={{ color: 'white', borderColor: 'white' }}>{pageData?.heroEyebrow || 'Real Weddings'}</span>
+      <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.4rem)', color: '#ffffff' }}>{pageData?.heroHeading || 'Stories, not just galleries.'}</h1>
     </div>
   </div>
 </section>
@@ -989,10 +990,10 @@ footer.site-footer{
 <section className="section tight">
   <div className="wrap">
     <div className="pill-row reveal" style={{"marginBottom":"2.5rem"}}>
-      <button className={`pill ${activeFilter === 'all' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'all')}>All</button>
-      <button className={`pill ${activeFilter === 'destination' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'destination')}>Destination</button>
-      <button className={`pill ${activeFilter === 'traditional' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'traditional')}>Traditional</button>
-      <button className={`pill ${activeFilter === 'intimate' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'intimate')}>Intimate</button>
+      <button className={`pill ${activeFilter === 'all' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'all')}>{pageData?.filterAllLabel || 'All'}</button>
+      <button className={`pill ${activeFilter === 'destination' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'destination')}>{pageData?.filterDestinationLabel || 'Destination'}</button>
+      <button className={`pill ${activeFilter === 'traditional' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'traditional')}>{pageData?.filterTraditionalLabel || 'Traditional'}</button>
+      <button className={`pill ${activeFilter === 'intimate' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'intimate')}>{pageData?.filterIntimateLabel || 'Intimate'}</button>
     </div>
 
     <div className="grid-3" id="dynamic-weddings-grid">
@@ -1011,7 +1012,7 @@ footer.site-footer{
         })
       ) : (
         <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>
-          <p style={{ color: 'var(--ink-soft)' }}>No weddings yet — add them in Sanity Studio and they will appear here.</p>
+          <p style={{ color: 'var(--ink-soft)' }}>{pageData?.emptyStateText || 'No weddings yet \u2014 add them in Sanity Studio and they will appear here.'}</p>
         </div>
       )}
     </div>
@@ -1020,8 +1021,8 @@ footer.site-footer{
 
 <section className="section olive center">
   <div className="wrap reveal">
-    <h2 style={{"color":"var(--paper)"}}>Want your wedding here next?</h2>
-    <a href="/contact" className="btn" style={{"borderColor":"var(--paper)","color":"var(--paper)","marginTop":"0.5rem"}}>Start an inquiry</a>
+    <h2 style={{"color":"var(--paper)"}}>{pageData?.ctaHeading || 'Want your wedding here next?'}</h2>
+    <a href={pageData?.ctaButtonHref || "/contact"} className="btn" style={{"borderColor":"var(--paper)","color":"var(--paper)","marginTop":"0.5rem"}}>{pageData?.ctaButtonLabel || 'Start an inquiry'}</a>
   </div>
 </section>
 
@@ -1033,21 +1034,15 @@ footer.site-footer{
     {/*  Instagram Grid  */}
     <div className="mt-12 mb-4">
       <div className="flex justify-center flex-wrap" style={{"gap":"clamp(1rem, 2.5vw, 2.5rem)"}}>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[0])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 1" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[1])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 2" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.heroes.realWeddings)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 3" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[3])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 4" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[4])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 5" />
-        </a>
+        {(settings?.instagramStripImages?.length
+          ? settings.instagramStripImages.map((img) => sanityImg(img))
+          : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
+        ).map((url, i) => (
+          <a key={i} href={"#"} className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+            <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
+          </a>
+        ))}
+      
       </div>
     </div>
     {/* Main Knot Divider */}
@@ -1069,8 +1064,8 @@ footer.site-footer{
             <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>PHOTOGRAPHY</p>
+            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{settings?.title || 'DKNOTT'}</p>
+            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{settings?.description || 'PHOTOGRAPHY'}</p>
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
@@ -1080,9 +1075,9 @@ footer.site-footer{
 
       {/*  Navigate  */}
       <div className="md:col-span-4">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerNavHeading || 'Navigate'}</p>
         <ul className="space-y-3 text-sm">
-          {navLinksFrom(settings).map((l) => (
+          {(settings?.footerNavLinks?.length ? settings.footerNavLinks : navLinksFrom(settings)).map((l) => (
             <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
           ))}
         </ul>
@@ -1090,7 +1085,7 @@ footer.site-footer{
 
       {/*  Contact  */}
       <div className="md:col-span-3">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerStudioHeading || 'Studio'}</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
           <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
           <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
@@ -1105,10 +1100,10 @@ footer.site-footer{
     {/*  CTA line  */}
     <div className="text-center mt-10">
       <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 3vw, 2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-        Every knot tells a story.<br className="hidden md:block" /> Let's start yours.
+        {settings?.footerCtaLine1 || 'Every knot tells a story.'}<br className="hidden md:block" /> {settings?.footerCtaLine2 || "Let's start yours."}
       </p>
-      <a href="/contact" className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
-        Enquire about your date
+      <a href={settings?.footerCtaHref || "/contact"} className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
+        {settings?.footerCtaButton || 'Enquire about your date'}
       </a>
     </div>
 

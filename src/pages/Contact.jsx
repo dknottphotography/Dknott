@@ -992,49 +992,49 @@ footer.site-footer{
           <form id="inquiry-form" onSubmit={handleSubmit}>
             <div className="grid-2" style={{"gap": "1.5rem", "marginBottom": "0"}}>
               <div className="ref-field">
-                <label className="ref-label">Your name</label>
-                <input type="text" className="ref-input" placeholder="Ananya" value={formData.name1} onChange={(e) => setFormData({...formData, name1: e.target.value})} required />
+                <label className="ref-label">{data?.formName1Label || 'Your name'}</label>
+                <input type="text" className="ref-input" placeholder={data?.formName1Placeholder || "Ananya"} value={formData.name1} onChange={(e) => setFormData({...formData, name1: e.target.value})} required />
               </div>
               <div className="ref-field">
-                <label className="ref-label">Partner's name</label>
-                <input type="text" className="ref-input" placeholder="Rohan" value={formData.name2} onChange={(e) => setFormData({...formData, name2: e.target.value})} />
-              </div>
-            </div>
-            
-            <div className="grid-2" style={{"gap": "1.5rem", "marginBottom": "0"}}>
-              <div className="ref-field">
-                <label className="ref-label">Email address</label>
-                <input type="email" className="ref-input" placeholder="you@email.com" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-              </div>
-              <div className="ref-field">
-                <label className="ref-label">Mobile number</label>
-                <input type="tel" className="ref-input" placeholder="+91 00000 00000" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
+                <label className="ref-label">{data?.formName2Label || "Partner's name"}</label>
+                <input type="text" className="ref-input" placeholder={data?.formName2Placeholder || "Rohan"} value={formData.name2} onChange={(e) => setFormData({...formData, name2: e.target.value})} />
               </div>
             </div>
             
             <div className="grid-2" style={{"gap": "1.5rem", "marginBottom": "0"}}>
               <div className="ref-field">
-                <label className="ref-label">Wedding date</label>
-                <input type="text" className="ref-input" placeholder="e.g. 14 Feb 2027" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} />
+                <label className="ref-label">{data?.formEmailLabel || 'Email address'}</label>
+                <input type="email" className="ref-input" placeholder={data?.formEmailPlaceholder || "you@email.com"} value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
               </div>
               <div className="ref-field">
-                <label className="ref-label">City / venue</label>
-                <input type="text" className="ref-input" placeholder="Hyderabad" value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} />
+                <label className="ref-label">{data?.formPhoneLabel || 'Mobile number'}</label>
+                <input type="tel" className="ref-input" placeholder={data?.formPhonePlaceholder || "+91 00000 00000"} value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
+              </div>
+            </div>
+            
+            <div className="grid-2" style={{"gap": "1.5rem", "marginBottom": "0"}}>
+              <div className="ref-field">
+                <label className="ref-label">{data?.formDateLabel || 'Wedding date'}</label>
+                <input type="text" className="ref-input" placeholder={data?.formDatePlaceholder || "e.g. 14 Feb 2027"} value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} />
+              </div>
+              <div className="ref-field">
+                <label className="ref-label">{data?.formCityLabel || 'City / venue'}</label>
+                <input type="text" className="ref-input" placeholder={data?.formCityPlaceholder || "Hyderabad"} value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} />
               </div>
             </div>
             
             <div className="ref-field" style={{"marginTop": "0.5rem"}}>
-              <label className="ref-label">Interested in</label>
+              <label className="ref-label">{data?.formInterestLabel || 'Interested in'}</label>
               <div style={{"display": "flex", "flexWrap": "wrap"}}>
-                <button type="button" className={`ref-pill ${formData.interest === 'Photography only' || !formData.interest ? 'active' : ''}`} onClick={() => setFormData({...formData, interest: 'Photography only'})}>Photography only</button>
-                <button type="button" className={`ref-pill ${formData.interest === 'Films only' ? 'active' : ''}`} onClick={() => setFormData({...formData, interest: 'Films only'})}>Films only</button>
-                <button type="button" className={`ref-pill ${formData.interest === 'Photography + Films' ? 'active' : ''}`} onClick={() => setFormData({...formData, interest: 'Photography + Films'})}>Photography + Films</button>
+                <button type="button" className={`ref-pill ${formData.interest === 'Photography only' || !formData.interest ? 'active' : ''}`} onClick={() => setFormData({...formData, interest: 'Photography only'})}>{data?.interestPhotoLabel || 'Photography only'}</button>
+                <button type="button" className={`ref-pill ${formData.interest === 'Films only' ? 'active' : ''}`} onClick={() => setFormData({...formData, interest: 'Films only'})}>{data?.interestFilmsLabel || 'Films only'}</button>
+                <button type="button" className={`ref-pill ${formData.interest === 'Photography + Films' ? 'active' : ''}`} onClick={() => setFormData({...formData, interest: 'Photography + Films'})}>{data?.interestBothLabel || 'Photography + Films'}</button>
               </div>
             </div>
             
             <div className="ref-field" style={{"marginTop": "1.5rem"}}>
-              <label className="ref-label">A little about your wedding</label>
-              <textarea className="ref-input" placeholder="Functions, guest count, what matters most to you..." rows="3" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} style={{"resize": "none", "lineHeight": "1.6"}}></textarea>
+              <label className="ref-label">{data?.formMessageLabel || 'A little about your wedding'}</label>
+              <textarea className="ref-input" placeholder={data?.formMessagePlaceholder || "Functions, guest count, what matters most to you..."} rows="3" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} style={{"resize": "none", "lineHeight": "1.6"}}></textarea>
             </div>
             
             <button 
@@ -1045,7 +1045,7 @@ footer.site-footer{
                 "cursor": isSubmitting ? "not-allowed" : "pointer"
               }}
             >
-              {isSubmitting ? "SENDING..." : submitStatus === "success" ? "SENT - THANK YOU" : "SUBMIT INQUIRY"}
+              {isSubmitting ? (data?.submitSendingLabel || "SENDING...") : submitStatus === "success" ? (data?.submitSentLabel || "SENT - THANK YOU") : (data?.submitLabel || "SUBMIT INQUIRY")}
             </button>
           </form>
         </div>
@@ -1056,24 +1056,24 @@ footer.site-footer{
         <h2 style={{"fontSize": "2.2rem", "fontWeight": "400", "fontFamily": "var(--serif)", "color": "var(--ink)", "marginBottom": "3rem", "letterSpacing": "-0.01em"}}>{data?.directHeading || 'Reach us directly'}</h2>
         
         <div className="info-block">
-          <span className="info-label">Email</span>
+          <span className="info-label">{data?.emailLabel || 'Email'}</span>
           <a href={`mailto:${contactEmail}`} className="info-text">{contactEmail}</a>
         </div>
         
         <div className="info-block">
-          <span className="info-label">Phone / Whatsapp</span>
+          <span className="info-label">{data?.phoneLabel || 'Phone / Whatsapp'}</span>
           <a href={`tel:${contactPhone.replace(/\s/g, "")}`} className="info-text">{contactPhone}</a>
         </div>
         
         <div className="info-block">
-          <span className="info-label">Instagram</span>
-          <a href={settings?.instagramUrl || "https://instagram.com/dknottphotography"} target="_blank" rel="noreferrer" className="info-text">@dknottphotography</a>
+          <span className="info-label">{data?.instagramLabel || 'Instagram'}</span>
+          <a href={settings?.instagramUrl || "https://instagram.com/dknottphotography"} target="_blank" rel="noreferrer" className="info-text">{data?.instagramHandle || "@dknottphotography"}</a>
         </div>
         
         <div className="map-container">
           {/* Default to a nice map of Hyderabad, India */}
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243647.31604107248!2d78.24323214532587!3d17.412299801452417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1716945892558!5m2!1sen!2sin" 
+            src={data?.mapEmbedUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243647.31604107248!2d78.24323214532587!3d17.412299801452417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1716945892558!5m2!1sen!2sin"} 
             allowFullScreen="" 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
@@ -1084,7 +1084,7 @@ footer.site-footer{
         <div style={{"marginTop": "2rem", "display": "flex", "alignItems": "center", "gap": "1rem"}}>
           <div style={{"width": "40px", "height": "1px", "background": "var(--gold)"}}></div>
           <p style={{"fontFamily": "var(--sans)", "fontSize": "0.75rem", "color": "var(--ink-soft)", "letterSpacing": "0.1em", "textTransform": "uppercase", "marginBottom": "0"}}>
-            Based in India, available worldwide.
+            {data?.locationNote || 'Based in India, available worldwide.'}
           </p>
         </div>
       </div>
@@ -1102,21 +1102,15 @@ footer.site-footer{
     {/*  Instagram Grid  */}
     <div className="mt-12 mb-4">
       <div className="flex justify-center flex-wrap" style={{"gap":"clamp(1rem, 2.5vw, 2.5rem)"}}>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[0])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 1" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[1])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 2" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.heroes.realWeddings)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 3" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[3])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 4" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[4])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 5" />
-        </a>
+        {(settings?.instagramStripImages?.length
+          ? settings.instagramStripImages.map((img) => sanityImg(img))
+          : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
+        ).map((url, i) => (
+          <a key={i} href={"#"} className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+            <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
+          </a>
+        ))}
+      
       </div>
     </div>
     {/* Main Knot Divider */}
@@ -1138,8 +1132,8 @@ footer.site-footer{
             <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>PHOTOGRAPHY</p>
+            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{settings?.title || 'DKNOTT'}</p>
+            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{settings?.description || 'PHOTOGRAPHY'}</p>
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
@@ -1149,9 +1143,9 @@ footer.site-footer{
 
       {/*  Navigate  */}
       <div className="md:col-span-4">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerNavHeading || 'Navigate'}</p>
         <ul className="space-y-3 text-sm">
-          {navLinksFrom(settings).map((l) => (
+          {(settings?.footerNavLinks?.length ? settings.footerNavLinks : navLinksFrom(settings)).map((l) => (
             <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
           ))}
         </ul>
@@ -1159,7 +1153,7 @@ footer.site-footer{
 
       {/*  Contact  */}
       <div className="md:col-span-3">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerStudioHeading || 'Studio'}</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
           <li>{contactAddress}</li>
           <li>{contactEmail}</li>
@@ -1174,10 +1168,10 @@ footer.site-footer{
     {/*  CTA line  */}
     <div className="text-center mt-10">
       <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 3vw, 2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-        Every knot tells a story.<br className="hidden md:block" /> Let's start yours.
+        {settings?.footerCtaLine1 || 'Every knot tells a story.'}<br className="hidden md:block" /> {settings?.footerCtaLine2 || "Let's start yours."}
       </p>
-      <a href="/contact" className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
-        Enquire about your date
+      <a href={settings?.footerCtaHref || "/contact"} className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
+        {settings?.footerCtaButton || 'Enquire about your date'}
       </a>
     </div>
 
@@ -1191,7 +1185,7 @@ footer.site-footer{
         <a href={settings?.pinterestUrl || 'https://www.pinterest.com/dknottphotography'} className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.163 0 7.398 2.967 7.398 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
         </a>
-        <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label="Back to top">
+        <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label={settings?.backToTopLabel || "Back to top"}>
           ↑
         </button>
       </div>

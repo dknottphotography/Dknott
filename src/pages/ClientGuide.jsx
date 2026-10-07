@@ -1,8 +1,64 @@
 import React, { useEffect } from 'react';
 import { cloudinaryUrl, handleImageError } from '../lib/cloudinary';
 import { commonImages, weddingGalleries } from '../data/images';
+import { useSanityDoc } from '../lib/useSanityDoc';
+import { sanityImg } from '../lib/sanityContent';
+import { navLinksFrom, isActiveLink } from '../lib/siteContent';
+
+/* Built-in FAQs (used when Sanity has none yet). */
+const FAQS = [
+  {
+    question: "How far in advance should we book?",
+    answer: "Most of our couples book 8\u201312 months out, especially for wedding-season dates (October to February). We do sometimes take on shorter-notice bookings \u2014 reach out and we'll tell you honestly if your date is realistic.",
+    open: true
+  },
+  {
+    question: "What's included in a standard package?",
+    answer: "Every package includes a lead photographer, full-day coverage, an online gallery of edited images, and a teaser film. Feature films, second shooters, albums and additional days are available as add-ons \u2014 we'll walk through the options on our call.",
+    open: false
+  },
+  {
+    question: "Do you travel for destination weddings?",
+    answer: "Yes \u2014 we regularly shoot outside our home city and are happy to travel internationally. Travel and stay are quoted separately based on the location and number of days.",
+    open: false
+  },
+  {
+    question: "How long until we get our photos?",
+    answer: "A teaser gallery of 40\u201360 images arrives within a week of the wedding. The full edited gallery and feature film are delivered within 6\u20138 weeks, sooner outside peak season.",
+    open: false
+  },
+  {
+    question: "Do we get the raw, unedited files?",
+    answer: "We deliver fully edited, colour-graded images rather than raw files \u2014 editing is a core part of how we shape the final story, and it's included in every package.",
+    open: false
+  },
+  {
+    question: "Can we book just photography or just film?",
+    answer: "Yes, both are available separately, though most couples find it easier to book both together as one coordinated team rather than syncing two vendors' schedules.",
+    open: false
+  },
+  {
+    question: "How many functions can you cover?",
+    answer: "As many as your wedding has. Multi-day, multi-function bookings are the norm for us, not the exception \u2014 mehendi, haldi, sangeet, ceremony and reception can all be quoted as one package.",
+    open: false
+  },
+  {
+    question: "What's your payment structure?",
+    answer: "We ask for a booking deposit to confirm your date, with the remaining balance due before the wedding. Exact terms are laid out in your contract once we've confirmed your package.",
+    open: false
+  },
+  {
+    question: "Do you print albums?",
+    answer: "Yes \u2014 hand-designed, printed albums are available as an add-on, and we'll walk you through layout options once your gallery is finalised.",
+    open: false
+  }
+];
 
 export default function ClientGuide() {
+  const { data } = useSanityDoc('clientGuidePage');
+  const { data: settings } = useSanityDoc('siteSettings');
+  // FAQs from Sanity (clientGuidePage.faqs) with built-in fallback.
+  const faqs = (data?.faqs && data.faqs.length) ? data.faqs : FAQS;
   useEffect(() => {
     if (window.__ClientGuideScriptLoaded) return;
     window.__ClientGuideScriptLoaded = true;
@@ -662,16 +718,12 @@ footer.site-footer{
 <header className="site-nav">
   <div className="wrap nav-row">
     <a href="/home" className="logo" style={{"display":"flex","alignItems":"center"}}>
-      <img src={cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
+      <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
     </a>
     <nav className="nav-links">
-      <a href="/home">Home</a>
-      <a href="/about">About</a>
-      <a href="/our_story">Our Story</a>
-      <a href="/wedding_films">Wedding Films</a>
-      <a href="/real_weddings">Real Weddings</a>
-      <a href="/client_guide" className="active">Client Guide</a>
-      <a href="/contact">Contact</a>
+      {navLinksFrom(settings).map((l) => (
+        <a key={l.href} href={l.href} className={isActiveLink(l.href, '/client_guide') ? 'active' : undefined}>{l.label}</a>
+      ))}
     </nav>
     <div className="nav-cta">
       <button className="nav-toggle" aria-label="Menu">
@@ -683,73 +735,34 @@ footer.site-footer{
 
 <section className="hero-band">
   <img
-    src={cloudinaryUrl(commonImages.heroes?.clientGuide || 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790349408/RSR_5653-2_1.jpg')}
+    src={sanityImg(data?.heroImage) || cloudinaryUrl(commonImages.heroes?.clientGuide || 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790349408/RSR_5653-2_1.jpg')}
     onError={handleImageError}
     alt="Client Guide Hero"
     className="client-hero-img object-[31%_center] md:object-[center_82%]"
   />
   <div className="hero-content wrap" style={{ position: "relative", zIndex: "2", color: "white", textShadow: "0 2px 10px rgba(0,0,0,0.6)", paddingBottom: "clamp(2rem, 4vw, 3.5rem)" }}>
-    <span className="eyebrow" style={{ color: "white", borderColor: "white" }}>Client Guide</span>
-    <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)", maxWidth: "24ch", lineHeight: 1.25 }}>Everything you'd normally ask us over coffee.</h1>
+    <span className="eyebrow" style={{ color: "white", borderColor: "white" }}>{data?.heroEyebrow || 'Client Guide'}</span>
+    <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)", maxWidth: "24ch", lineHeight: 1.25 }}>{data?.heroHeading || `Everything you'd normally ask us over coffee.`}</h1>
   </div>
 </section>
 
 <section className="section tight">
   <div className="wrap max-56 mx-auto reveal">
 
-    <details className="faq" open>
-      <summary>How far in advance should we book?</summary>
-      <p>Most of our couples book 8–12 months out, especially for wedding-season dates (October to February). We do sometimes take on shorter-notice bookings — reach out and we'll tell you honestly if your date is realistic.</p>
-    </details>
-
-    <details className="faq">
-      <summary>What's included in a standard package?</summary>
-      <p>Every package includes a lead photographer, full-day coverage, an online gallery of edited images, and a teaser film. Feature films, second shooters, albums and additional days are available as add-ons — we'll walk through the options on our call.</p>
-    </details>
-
-    <details className="faq">
-      <summary>Do you travel for destination weddings?</summary>
-      <p>Yes — we regularly shoot outside our home city and are happy to travel internationally. Travel and stay are quoted separately based on the location and number of days.</p>
-    </details>
-
-    <details className="faq">
-      <summary>How long until we get our photos?</summary>
-      <p>A teaser gallery of 40–60 images arrives within a week of the wedding. The full edited gallery and feature film are delivered within 6–8 weeks, sooner outside peak season.</p>
-    </details>
-
-    <details className="faq">
-      <summary>Do we get the raw, unedited files?</summary>
-      <p>We deliver fully edited, colour-graded images rather than raw files — editing is a core part of how we shape the final story, and it's included in every package.</p>
-    </details>
-
-    <details className="faq">
-      <summary>Can we book just photography or just film?</summary>
-      <p>Yes, both are available separately, though most couples find it easier to book both together as one coordinated team rather than syncing two vendors' schedules.</p>
-    </details>
-
-    <details className="faq">
-      <summary>How many functions can you cover?</summary>
-      <p>As many as your wedding has. Multi-day, multi-function bookings are the norm for us, not the exception — mehendi, haldi, sangeet, ceremony and reception can all be quoted as one package.</p>
-    </details>
-
-    <details className="faq">
-      <summary>What's your payment structure?</summary>
-      <p>We ask for a booking deposit to confirm your date, with the remaining balance due before the wedding. Exact terms are laid out in your contract once we've confirmed your package.</p>
-    </details>
-
-    <details className="faq">
-      <summary>Do you print albums?</summary>
-      <p>Yes — hand-designed, printed albums are available as an add-on, and we'll walk you through layout options once your gallery is finalised.</p>
-    </details>
-
+    {faqs.map((f, i) => (
+      <details className="faq" key={i} open={i === 0}>
+        <summary>{f.question}</summary>
+        <p>{f.answer}</p>
+      </details>
+    ))}
   </div>
 </section>
 
 <section className="section olive center">
   <div className="wrap reveal">
-    <h2 style={{"color":"var(--paper)"}}>Still have a question?</h2>
-    <p className="max-56 mx-auto" style={{"marginBottom":"1.5rem"}}>We'd rather answer it now than surprise you later — reach out any time.</p>
-    <a href="/contact" className="btn" style={{"borderColor":"var(--paper)","color":"var(--paper)"}}>Ask us directly</a>
+    <h2 style={{"color":"var(--paper)"}}>{data?.ctaHeading || 'Still have a question?'}</h2>
+    <p className="max-56 mx-auto" style={{"marginBottom":"1.5rem"}}>{data?.ctaText || `We'd rather answer it now than surprise you later — reach out any time.`}</p>
+    <a href="/contact" className="btn" style={{"borderColor":"var(--paper)","color":"var(--paper)"}}>{data?.ctaLabel || 'Ask us directly'}</a>
   </div>
 </section>
 
@@ -794,7 +807,7 @@ footer.site-footer{
       <div className="md:col-span-5">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden" style={{"background":"var(--paper)","border":"1px solid rgba(199,163,105,0.3)"}}>
-            <img src={cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
+            <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
@@ -802,7 +815,7 @@ footer.site-footer{
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
-          Documentary wedding photography and film, shot across India — quiet moments, kept honestly.
+          {settings?.footerTagline || 'Documentary wedding photography and film, shot across India — quiet moments, kept honestly.'}
         </p>
       </div>
 
@@ -810,13 +823,9 @@ footer.site-footer{
       <div className="md:col-span-4">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
         <ul className="space-y-3 text-sm">
-          <li><a href="/home" className="grain-link" style={{"color":"var(--parchment)"}}>Home</a></li>
-          <li><a href="/about" className="grain-link" style={{"color":"var(--parchment)"}}>About</a></li>
-          <li><a href="/our_story" className="grain-link" style={{"color":"var(--parchment)"}}>Our story</a></li>
-          <li><a href="/wedding_films" className="grain-link" style={{"color":"var(--parchment)"}}>Wedding films</a></li>
-          <li><a href="/real_weddings" className="grain-link" style={{"color":"var(--parchment)"}}>Real weddings</a></li>
-          <li><a href="/client_guide" className="grain-link" style={{"color":"var(--parchment)"}}>Client guide</a></li>
-          <li><a href="/contact" className="grain-link" style={{"color":"var(--parchment)"}}>Let's connect</a></li>
+          {navLinksFrom(settings).map((l) => (
+            <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
+          ))}
         </ul>
       </div>
 
@@ -824,9 +833,9 @@ footer.site-footer{
       <div className="md:col-span-3">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
-          <li>Hyderabad, India</li>
-          <li>dknottphotography3@gmail.com</li>
-          <li>+91 91107 08256</li>
+          <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
+          <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
+          <li>{settings?.contactPhone || '+91 91107 08256'}</li>
         </ul>
       </div>
 
@@ -846,7 +855,7 @@ footer.site-footer{
 
     {/*  Bottom bar  */}
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10 pt-4" style={{"borderTop":"1px solid rgba(199,163,105,0.15)"}}>
-      <p className="text-xs" style={{"color":"var(--sage)"}}>© 2026 DKNOTT Photography. All rights reserved.</p>
+      <p className="text-xs" style={{"color":"var(--sage)"}}>{settings?.footerText || '© 2026 DKNOTT Photography. All rights reserved.'}</p>
       <div className="flex items-center gap-6">
         <a href="#" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Instagram">
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>

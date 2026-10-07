@@ -2,8 +2,17 @@ import React, { useEffect } from 'react';
 import { cloudinaryUrl, handleImageError } from '../lib/cloudinary';
 import { commonImages, weddingGalleries } from '../data/images';
 import { supabase } from '../lib/supabaseClient';
+import { useSanityDoc } from '../lib/useSanityDoc';
+import { sanityImg } from '../lib/sanityContent';
+import { navLinksFrom, isActiveLink } from '../lib/siteContent';
 
 export default function Contact() {
+  const { data } = useSanityDoc('contactPage');
+  const { data: settings } = useSanityDoc('siteSettings');
+  // Contact details: page-specific first, then site-wide settings, then built-ins.
+  const contactEmail = data?.email || settings?.contactEmail || 'dknottphotography3@gmail.com';
+  const contactPhone = data?.phone || settings?.contactPhone || '+91 91107 08256';
+  const contactAddress = data?.address || settings?.contactAddress || 'Hyderabad, India';
   const [formData, setFormData] = React.useState({
     name1: '', name2: '', email: '', phone: '', date: '', city: '', interest: 'Photography only', message: ''
   });
@@ -818,16 +827,12 @@ footer.site-footer{
 <header className="site-nav">
   <div className="wrap nav-row">
     <a href="/home" className="logo" style={{ display: 'flex', alignItems: 'center' }}>
-      <img src={cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
+      <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
     </a>
     <nav className="nav-links">
-      <a href="/home">Home</a>
-      <a href="/about">About</a>
-      <a href="/our_story">Our Story</a>
-      <a href="/wedding_films">Wedding Films</a>
-      <a href="/real_weddings">Real Weddings</a>
-      <a href="/client_guide">Client Guide</a>
-      <a href="/contact" className="active">Contact</a>
+      {navLinksFrom(settings).map((l) => (
+        <a key={l.href} href={l.href} className={isActiveLink(l.href, '/contact') ? 'active' : undefined}>{l.label}</a>
+      ))}
     </nav>
     <div className="nav-cta">
       <button className="nav-toggle" aria-label="Menu">
@@ -839,10 +844,10 @@ footer.site-footer{
 
 {/*  HERO  */}
 <section className="contact-hero">
-  <img src={cloudinaryUrl('another_image.png')} onError={handleImageError} alt="Contact Hero" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","zIndex":"0","filter":"brightness(0.6)"}} />
+  <img src={sanityImg(data?.heroImage) || cloudinaryUrl('another_image.png')} onError={handleImageError} alt="Contact Hero" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","zIndex":"0","filter":"brightness(0.6)"}} />
   <div style={{"position":"relative","zIndex":"2","textAlign":"center","color":"white","textShadow":"0 4px 15px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6)"}}>
-    <h1 className="reveal" style={{"fontSize":"clamp(2.8rem, 6vw, 4.2rem)","fontFamily":"var(--serif)","letterSpacing":"0.02em","marginBottom":"1rem","color":"white"}}>Tell us about your day.</h1>
-    <p className="reveal" style={{"animationDelay":"0.2s","fontFamily":"var(--sans)","fontSize":"0.85rem","letterSpacing":"0.2em","textTransform":"uppercase","color":"#DFBB7B","maxWidth":"600px","margin":"0 auto","lineHeight":"1.6"}}>Fill in the details below and we'll get back to you within 24–48 hours.</p>
+    <h1 className="reveal" style={{"fontSize":"clamp(2.8rem, 6vw, 4.2rem)","fontFamily":"var(--serif)","letterSpacing":"0.02em","marginBottom":"1rem","color":"white"}}>{data?.heading || 'Tell us about your day.'}</h1>
+    <p className="reveal" style={{"animationDelay":"0.2s","fontFamily":"var(--sans)","fontSize":"0.85rem","letterSpacing":"0.2em","textTransform":"uppercase","color":"#DFBB7B","maxWidth":"600px","margin":"0 auto","lineHeight":"1.6"}}>{data?.subheading || `Fill in the details below and we'll get back to you within 24–48 hours.`}</p>
   </div>
 </section>
 
@@ -982,7 +987,7 @@ footer.site-footer{
       {/* LEFT COLUMN: FORM */}
       <div className="left-col reveal">
         <div className="contact-container">
-          <h2 style={{"fontSize": "1.6rem", "fontFamily": "var(--serif)", "color": "var(--ink)", "marginBottom": "2.5rem"}}>Send an Inquiry</h2>
+          <h2 style={{"fontSize": "1.6rem", "fontFamily": "var(--serif)", "color": "var(--ink)", "marginBottom": "2.5rem"}}>{data?.formHeading || 'Send an Inquiry'}</h2>
           
           <form id="inquiry-form" onSubmit={handleSubmit}>
             <div className="grid-2" style={{"gap": "1.5rem", "marginBottom": "0"}}>
@@ -1048,21 +1053,21 @@ footer.site-footer{
 
       {/* RIGHT COLUMN: DIRECT CONTACT */}
       <div className="right-col reveal" style={{"animationDelay": "0.2s"}}>
-        <h2 style={{"fontSize": "2.2rem", "fontWeight": "400", "fontFamily": "var(--serif)", "color": "var(--ink)", "marginBottom": "3rem", "letterSpacing": "-0.01em"}}>Reach us directly</h2>
+        <h2 style={{"fontSize": "2.2rem", "fontWeight": "400", "fontFamily": "var(--serif)", "color": "var(--ink)", "marginBottom": "3rem", "letterSpacing": "-0.01em"}}>{data?.directHeading || 'Reach us directly'}</h2>
         
         <div className="info-block">
           <span className="info-label">Email</span>
-          <a href="mailto:dknottphotography3@gmail.com" className="info-text">dknottphotography3@gmail.com</a>
+          <a href={`mailto:${contactEmail}`} className="info-text">{contactEmail}</a>
         </div>
         
         <div className="info-block">
           <span className="info-label">Phone / Whatsapp</span>
-          <a href="tel:+919110708256" className="info-text">+91 91107 08256</a>
+          <a href={`tel:${contactPhone.replace(/\s/g, "")}`} className="info-text">{contactPhone}</a>
         </div>
         
         <div className="info-block">
           <span className="info-label">Instagram</span>
-          <a href="https://instagram.com/dknottphotography" target="_blank" rel="noreferrer" className="info-text">@dknottphotography</a>
+          <a href={settings?.instagramUrl || "https://instagram.com/dknottphotography"} target="_blank" rel="noreferrer" className="info-text">@dknottphotography</a>
         </div>
         
         <div className="map-container">
@@ -1130,7 +1135,7 @@ footer.site-footer{
       <div className="md:col-span-5">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden" style={{ "color": "#F8F3E9", "background":"var(--paper)","border":"1px solid rgba(199,163,105,0.3)"}}>
-            <img src={cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
+            <img src={sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
@@ -1138,7 +1143,7 @@ footer.site-footer{
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
-          Documentary wedding photography and film, shot across India — quiet moments, kept honestly.
+          {settings?.footerTagline || 'Documentary wedding photography and film, shot across India — quiet moments, kept honestly.'}
         </p>
       </div>
 
@@ -1146,13 +1151,9 @@ footer.site-footer{
       <div className="md:col-span-4">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
         <ul className="space-y-3 text-sm">
-          <li><a href="/home" className="grain-link" style={{"color":"var(--parchment)"}}>Home</a></li>
-          <li><a href="/about" className="grain-link" style={{"color":"var(--parchment)"}}>About</a></li>
-          <li><a href="/our_story" className="grain-link" style={{"color":"var(--parchment)"}}>Our story</a></li>
-          <li><a href="/wedding_films" className="grain-link" style={{"color":"var(--parchment)"}}>Wedding films</a></li>
-          <li><a href="/real_weddings" className="grain-link" style={{"color":"var(--parchment)"}}>Real weddings</a></li>
-          <li><a href="/client_guide" className="grain-link" style={{"color":"var(--parchment)"}}>Client guide</a></li>
-          <li><a href="/contact" className="grain-link" style={{"color":"var(--parchment)"}}>Let's connect</a></li>
+          {navLinksFrom(settings).map((l) => (
+            <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
+          ))}
         </ul>
       </div>
 
@@ -1160,9 +1161,9 @@ footer.site-footer{
       <div className="md:col-span-3">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
-          <li>Hyderabad, India</li>
-          <li>dknottphotography3@gmail.com</li>
-          <li>+91 91107 08256</li>
+          <li>{contactAddress}</li>
+          <li>{contactEmail}</li>
+          <li>{contactPhone}</li>
         </ul>
       </div>
 
@@ -1182,12 +1183,12 @@ footer.site-footer{
 
     {/*  Bottom bar  */}
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10 pt-4" style={{"borderTop":"1px solid rgba(199,163,105,0.15)"}}>
-      <p className="text-xs" style={{"color":"var(--sage)"}}>© 2026 DKNOTT Photography. All rights reserved.</p>
+      <p className="text-xs" style={{"color":"var(--sage)"}}>{settings?.footerText || '© 2026 DKNOTT Photography. All rights reserved.'}</p>
       <div className="flex items-center gap-6">
-        <a href="https://www.instagram.com/dknottphotography" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Instagram">
+        <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Instagram">
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         </a>
-        <a href="https://www.pinterest.com/dknottphotography" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
+        <a href={settings?.pinterestUrl || 'https://www.pinterest.com/dknottphotography'} className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.163 0 7.398 2.967 7.398 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
         </a>
         <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label="Back to top">

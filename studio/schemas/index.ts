@@ -7,6 +7,8 @@ import ourStoryPage from './ourStoryPage'
 import aboutPage from './aboutPage'
 import weddingFilmsPage from './weddingFilmsPage'
 import clientGuidePage from './clientGuidePage'
+import realWeddingsPage from './realWeddingsPage'
+import linkTreePage from './linkTreePage'
 
 export const schemaTypes = [
   siteSettings,
@@ -18,4 +20,6 @@ export const schemaTypes = [
   aboutPage,
   weddingFilmsPage,
   clientGuidePage,
+  realWeddingsPage,
+  linkTreePage,
 ]

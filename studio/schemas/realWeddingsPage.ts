@@ -1,0 +1,92 @@
+import {defineField, defineType} from 'sanity'
+
+export default defineType({
+  name: 'realWeddingsPage',
+  title: 'Real Weddings Page',
+  type: 'document',
+  groups: [
+    {name: 'hero', title: 'Hero Section'},
+    {name: 'filters', title: 'Filter Pills'},
+    {name: 'grid', title: 'Weddings Grid'},
+    {name: 'cta', title: 'Call to Action'},
+  ],
+  fields: [
+    defineField({
+      name: 'heroImage',
+      title: 'Hero Background Image',
+      type: 'cloudinary.asset',
+      group: 'hero',
+    }),
+    defineField({
+      name: 'heroEyebrow',
+      title: 'Hero Eyebrow',
+      type: 'string',
+      group: 'hero',
+      initialValue: 'Real Weddings',
+    }),
+    defineField({
+      name: 'heroHeading',
+      title: 'Hero Heading',
+      type: 'string',
+      group: 'hero',
+      initialValue: 'Stories, not just galleries.',
+    }),
+    defineField({
+      name: 'filterAllLabel',
+      title: 'Filter: All Label',
+      type: 'string',
+      group: 'filters',
+      initialValue: 'All',
+    }),
+    defineField({
+      name: 'filterDestinationLabel',
+      title: 'Filter: Destination Label',
+      type: 'string',
+      group: 'filters',
+      initialValue: 'Destination',
+    }),
+    defineField({
+      name: 'filterTraditionalLabel',
+      title: 'Filter: Traditional Label',
+      type: 'string',
+      group: 'filters',
+      initialValue: 'Traditional',
+    }),
+    defineField({
+      name: 'filterIntimateLabel',
+      title: 'Filter: Intimate Label',
+      type: 'string',
+      group: 'filters',
+      initialValue: 'Intimate',
+    }),
+    defineField({
+      name: 'emptyStateText',
+      title: 'Empty Grid Message',
+      type: 'string',
+      group: 'grid',
+      description: 'Shown when no weddings have been added yet.',
+      initialValue: 'No weddings yet — add them in Sanity Studio and they will appear here.',
+    }),
+    defineField({
+      name: 'ctaHeading',
+      title: 'CTA Heading',
+      type: 'string',
+      group: 'cta',
+      initialValue: 'Want your wedding here next?',
+    }),
+    defineField({
+      name: 'ctaButtonLabel',
+      title: 'CTA Button Label',
+      type: 'string',
+      group: 'cta',
+      initialValue: 'Start an inquiry',
+    }),
+    defineField({
+      name: 'ctaButtonHref',
+      title: 'CTA Button Link',
+      type: 'string',
+      group: 'cta',
+      initialValue: '/contact',
+    }),
+  ],
+})

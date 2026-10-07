@@ -11,7 +11,7 @@ export default defineType({
       name: 'title',
       title: 'Site Title',
       type: 'string',
-      description: 'Short brand name shown in the splash screen and footer, e.g. DKNOTT.',
+      description: 'MAIN brand title shown in the navigation, page heroes and footer, e.g. DKNOTT.',
     }),
     defineField({
       name: 'description',
@@ -158,6 +158,73 @@ export default defineType({
       name: 'pinterestUrl',
       title: 'Pinterest URL',
       type: 'url',
+    }),
+
+    // ── Browser tab ──────────────────────────────────────
+    defineField({
+      name: 'browserTabTitle',
+      title: 'Browser Tab Title',
+      type: 'string',
+      description: 'Text shown in the browser tab, e.g. DKNOTT Photography.',
+      initialValue: 'DKNOTT Photography',
+    }),
+
+    // ── Footer headings & CTA ────────────────────────────
+    defineField({
+      name: 'footerNavHeading',
+      title: 'Footer "Navigate" Heading',
+      type: 'string',
+      description: 'Small heading above the footer link column.',
+      initialValue: 'Navigate',
+    }),
+    defineField({
+      name: 'footerStudioHeading',
+      title: 'Footer "Studio" Heading',
+      type: 'string',
+      description: 'Small heading above the studio contact column.',
+      initialValue: 'Studio',
+    }),
+    defineField({
+      name: 'footerCtaLine1',
+      title: 'Footer CTA Line 1',
+      type: 'string',
+      description: 'First line of the big footer call-to-action.',
+      initialValue: 'Every knot tells a story.',
+    }),
+    defineField({
+      name: 'footerCtaLine2',
+      title: 'Footer CTA Line 2',
+      type: 'string',
+      description: 'Second line of the big footer call-to-action.',
+      initialValue: "Let's start yours.",
+    }),
+    defineField({
+      name: 'footerCtaButton',
+      title: 'Footer CTA Button Label',
+      type: 'string',
+      description: 'Button under the footer call-to-action.',
+      initialValue: 'Enquire about your date',
+    }),
+    defineField({
+      name: 'footerCtaHref',
+      title: 'Footer CTA Button Link',
+      type: 'string',
+      description: 'Where the footer CTA button goes, e.g. /contact.',
+      initialValue: '/contact',
+    }),
+    defineField({
+      name: 'backToTopLabel',
+      title: '"Back to Top" Button Label',
+      type: 'string',
+      description: 'Accessibility label for the back-to-top button in the footer.',
+      initialValue: 'Back to top',
+    }),
+    defineField({
+      name: 'instagramStripImages',
+      title: 'Footer Instagram Strip Photos',
+      type: 'array',
+      description: 'Small photo strip shown above the footer on every page. Leave empty to keep the default photos.',
+      of: [{type: 'cloudinary.asset'}],
     }),
   ],
 })

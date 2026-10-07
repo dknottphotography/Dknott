@@ -3,6 +3,9 @@ import { cloudinaryUrl, handleImageError } from '../lib/cloudinary';
 import { commonImages, weddingGalleries } from '../data/images';
 import { supabase } from '../lib/supabaseClient';
 import { client } from '../sanity';
+import { useSanityDoc } from '../lib/useSanityDoc';
+import { sanityImg, normalizeWeddings } from '../lib/sanityContent';
+import { navLinksFrom, isActiveLink } from '../lib/siteContent';
 
 const WeddingCardSlideshow = ({ wedding, offset }) => {
   const [images, setImages] = useState([]);
@@ -91,7 +94,7 @@ export default function Home() {
     }).catch(console.error);
   }, []);
 
-  const testimonials = [
+  const DEFAULT_TESTIMONIALS = [
     {
       author: 'Shiva & Shravani',
       text: `<p>Thank you so much to you and your team for capturing every moment with such precision and artistry. Your attention to detail, professionalism, and ability to preserve genuine emotions was absolutely amazing.</p><p>It created lasting memories. The quality, composition, and timing were captured beautifully.</p><p>We sincerely appreciate your dedication, creativity, and effort throughout the entire event.</p><p>Thank you so much from me and Shravani.</p>`,
@@ -109,6 +112,15 @@ export default function Home() {
     }
   ];
 
+  // Testimonials from Sanity (homePage.testimonials) with built-in fallback.
+  const testimonials = (homeData?.testimonials && homeData.testimonials.length)
+    ? homeData.testimonials.map((t, i) => ({
+        author: t.author || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length].author,
+        text: t.text || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length].text,
+        image: sanityImg(t.image) || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length].image,
+      }))
+    : DEFAULT_TESTIMONIALS;
+
   const handleTestiChange = (direction) => {
     if (testiFading) return;
     setTestiFading(true);
@@ -123,7 +135,12 @@ export default function Home() {
 
 
   useEffect(() => {
-    setWeddings(weddingGalleries.slice(0, 3));
+    client.fetch('*[_type == "realWedding"] | order(_createdAt desc)[0...3]')
+      .then((docs) => {
+        const list = normalizeWeddings(docs);
+        setWeddings(list.length ? list : weddingGalleries.slice(0, 3));
+      })
+      .catch(() => setWeddings(weddingGalleries.slice(0, 3)));
   }, []);
 
   useEffect(() => {
@@ -837,16 +854,12 @@ footer.site-footer{
 <header className="site-nav">
   <div className="wrap nav-row">
     <a href="/home" className="logo" style={{"display":"flex","alignItems":"center"}}>
-      <img src={cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
+      <img src={sanityImg(siteSettings?.logo) || cloudinaryUrl(commonImages.logos.nav)} onError={handleImageError} alt="DKNOTT Logo" className="brand-logo" />
     </a>
     <nav className="nav-links">
-      <a href="/home" className="active">Home</a>
-      <a href="/about">About</a>
-      <a href="/our_story">Our Story</a>
-      <a href="/wedding_films">Wedding Films</a>
-      <a href="/real_weddings">Real Weddings</a>
-      <a href="/client_guide">Client Guide</a>
-      <a href="/contact">Contact</a>
+      {navLinksFrom(siteSettings).map((l) => (
+        <a key={l.href} href={l.href} className={isActiveLink(l.href, '/home') ? 'active' : undefined}>{l.label}</a>
+      ))}
     </nav>
     <div className="nav-cta">
       <button className="nav-toggle" aria-label="Menu">
@@ -901,7 +914,7 @@ footer.site-footer{
 <section className="section" style={{"padding":"2.5rem 0 1.5rem 0","backgroundColor":"#EBE6E0"}}>
   <div className="wrap center max-56 mx-auto reveal">
     <p className="lede" style={{"lineHeight":"1.8","color":"var(--ink)"}}>
-      We take the time to truly understand you and your story - the way you laugh together, the quiet moments you share and the love that binds you. This lets us capture your most cherished moments in a way that feels deeply personal and undeniably you.
+      {homeData?.introBody || `We take the time to truly understand you and your story - the way you laugh together, the quiet moments you share and the love that binds you. This lets us capture your most cherished moments in a way that feels deeply personal and undeniably you.`}
     </p>
   </div>
   
@@ -939,7 +952,7 @@ footer.site-footer{
 <section className="section py-8 lg:py-2" style={{"backgroundColor":"#EBE6E0"}}>
   <div className="wrap">
     <div className="center reveal" style={{"marginBottom":"2.5rem"}}>
-      <h2 style={{"fontWeight":"400","color":"var(--ink-soft)","fontSize":"2rem"}}>Real wedding Blog's</h2>
+      <h2 style={{"fontWeight":"400","color":"var(--ink-soft)","fontSize":"2rem"}}>{homeData?.portfolioHeading || `Real wedding Blog's`}</h2>
     </div>
     
     <div className="grid-3 reveal" style={{"alignItems":"start"}}>
@@ -999,14 +1012,14 @@ footer.site-footer{
 <section className="py-8 md:py-10" style={{"backgroundColor":"#2F2D2C","color":"var(--paper)"}}>
   <div className="wrap grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
     <div className="reveal" style={{"maxWidth":"280px","margin":"0 auto"}}>
-      <img src={cloudinaryUrl('gallery_8.jpg')} onError={handleImageError} alt="Celebrating Your Love" style={{"width":"100%","aspectRatio":"3/4","objectFit":"cover","borderRadius":"4px"}} />
+      <img src={sanityImg(homeData?.ctaImage) || cloudinaryUrl('gallery_8.jpg')} onError={handleImageError} alt="Celebrating Your Love" style={{"width":"100%","aspectRatio":"3/4","objectFit":"cover","borderRadius":"4px"}} />
     </div>
     <div className="reveal">
-      <span className="eyebrow" style={{"marginBottom":"1rem","fontSize":"0.7rem","color":"rgba(255,255,255,0.6)","display":"block","textAlign":"left"}}>AS SEEN ON THE COVER OF WEDDING MAGAZINE</span>
-      <h2 style={{"marginBottom":"1.5rem","color":"var(--paper)","fontSize":"clamp(1.6rem, 3vw, 2.2rem)","textAlign":"left"}}>Celebrating Your Love!</h2>
+      <span className="eyebrow" style={{"marginBottom":"1rem","fontSize":"0.7rem","color":"rgba(255,255,255,0.6)","display":"block","textAlign":"left"}}>{homeData?.ctaEyebrow || 'AS SEEN ON THE COVER OF WEDDING MAGAZINE'}</span>
+      <h2 style={{"marginBottom":"1.5rem","color":"var(--paper)","fontSize":"clamp(1.6rem, 3vw, 2.2rem)","textAlign":"left"}}>{homeData?.ctaHeading || 'Celebrating Your Love!'}</h2>
       <div style={{"display":"flex","gap":"1.5rem","fontSize":"0.88rem","fontWeight":"300","lineHeight":"1.8","flexDirection":"column","textAlign":"left"}}>
         <p style={{"color":"#F8F3E9","opacity":"0.95"}}>
-          "Your love story is one of a kind, and we believe your wedding photos should reflect exactly that. We take the time to build a strong connection to truly understand you and your partner—your personalities, your bond, and all the little details that make your relationship special. From our first conversation to the final delivery of your images, our ultimate goal is to document the real, unfiltered moments: the joyful tears, the stolen glances, the raucous laughter, and the quiet, intimate seconds. We are here to tell the beautiful story of your day."
+          {homeData?.ctaBody || 'Your love story is one of a kind, and we believe your wedding photos should reflect exactly that. We take the time to build a strong connection to truly understand you and your partner\u2014your personalities, your bond, and all the little details that make your relationship special. From our first conversation to the final delivery of your images, our ultimate goal is to document the real, unfiltered moments: the joyful tears, the stolen glances, the raucous laughter, and the quiet, intimate seconds. We are here to tell the beautiful story of your day.'}
         </p>
       </div>
     </div>
@@ -1071,7 +1084,7 @@ footer.site-footer{
       <div className="md:col-span-5">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden" style={{"background":"var(--paper)","border":"1px solid rgba(199,163,105,0.3)"}}>
-            <img src={cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
+            <img src={sanityImg(siteSettings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
@@ -1079,7 +1092,7 @@ footer.site-footer{
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
-          Documentary wedding photography and film, shot across India — quiet moments, kept honestly.
+          {siteSettings?.footerTagline || 'Documentary wedding photography and film, shot across India — quiet moments, kept honestly.'}
         </p>
       </div>
 
@@ -1101,9 +1114,9 @@ footer.site-footer{
       <div className="md:col-span-3">
         <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
-          <li>Hyderbad, India</li>
-          <li>dknottphotography3@gmail.com</li>
-          <li>+91 91107 08256</li>
+          <li>{siteSettings?.contactAddress || 'Hyderbad, India'}</li>
+          <li>{siteSettings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
+          <li>{siteSettings?.contactPhone || '+91 91107 08256'}</li>
         </ul>
       </div>
 

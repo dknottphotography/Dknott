@@ -1636,7 +1636,7 @@ header.site-nav{
           alt="DKNOTT Photography"
         />
         <div className="ab-hero-content">
-          <h1 className=\"ab-hero-heading\">{settings?.title || 'DKNOTT PHOTOGRAPHY'}</h1>
+          <h1 className="ab-hero-heading">{settings?.title || 'DKNOTT PHOTOGRAPHY'}</h1>
         </div>
       </section>
 

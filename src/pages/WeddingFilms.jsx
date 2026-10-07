@@ -908,10 +908,10 @@ footer.site-footer{
 <section className="section tight" style={{paddingBottom: "0"}}>
   <div className="wrap center reveal">
     <div className="pill-row" style={{justifyContent: "center", marginBottom: "0rem", paddingTop: "2rem"}}>
-      <button className="pill active" data-filter="all">All Films</button>
-      <button className="pill" data-filter="wedding">Weddings</button>
-      <button className="pill" data-filter="teaser">Teasers</button>
-      <button className="pill" data-filter="invitation">Invitations</button>
+      <button className="pill active" data-filter="all">{data?.filterAllLabel || 'All Films'}</button>
+      <button className="pill" data-filter="wedding">{data?.filterWeddingsLabel || 'Weddings'}</button>
+      <button className="pill" data-filter="teaser">{data?.filterTeasersLabel || 'Teasers'}</button>
+      <button className="pill" data-filter="invitation">{data?.filterInvitationsLabel || 'Invitations'}</button>
     </div>
   </div>
 </section>
@@ -929,21 +929,15 @@ footer.site-footer{
     {/*  Instagram Grid  */}
     <div className="mt-12 mb-4">
       <div className="flex justify-center flex-wrap" style={{"gap":"clamp(1rem, 2.5vw, 2.5rem)"}}>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[0])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 1" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[1])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 2" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.heroes.realWeddings)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 3" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[3])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 4" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[4])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 5" />
-        </a>
+        {(settings?.instagramStripImages?.length
+          ? settings.instagramStripImages.map((img) => sanityImg(img))
+          : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
+        ).map((url, i) => (
+          <a key={i} href={"#"} className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+            <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
+          </a>
+        ))}
+      
       </div>
     </div>
     {/* Main Knot Divider */}
@@ -976,9 +970,9 @@ footer.site-footer{
 
       {/*  Navigate  */}
       <div className="md:col-span-4">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerNavHeading || 'Navigate'}</p>
         <ul className="space-y-3 text-sm">
-          {navLinksFrom(settings).map((l) => (
+          {(settings?.footerNavLinks?.length ? settings.footerNavLinks : navLinksFrom(settings)).map((l) => (
             <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
           ))}
         </ul>
@@ -986,7 +980,7 @@ footer.site-footer{
 
       {/*  Contact  */}
       <div className="md:col-span-3">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerStudioHeading || 'Studio'}</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
           <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
           <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
@@ -1001,10 +995,10 @@ footer.site-footer{
     {/*  CTA line  */}
     <div className="text-center mt-10">
       <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 3vw, 2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-        Every knot tells a story.<br className="hidden md:block" /> Let's start yours.
+        {settings?.footerCtaLine1 || 'Every knot tells a story.'}<br className="hidden md:block" /> {settings?.footerCtaLine2 || "Let's start yours."}
       </p>
-      <a href="/contact" className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
-        Enquire about your date
+      <a href={settings?.footerCtaHref || "/contact"} className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
+        {settings?.footerCtaButton || 'Enquire about your date'}
       </a>
     </div>
 

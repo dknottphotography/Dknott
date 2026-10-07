@@ -6,6 +6,7 @@ import { sanityImg } from '../lib/sanityContent';
 
 export default function Index() {
   const { data: settings } = useSanityDoc('siteSettings');
+  const { data: pageData } = useSanityDoc('linkTreePage');
   useEffect(() => {
     if (window.__IndexScriptLoaded) return;
     window.__IndexScriptLoaded = true;
@@ -55,14 +56,9 @@ export default function Index() {
 
 
     <header className="flex w-screen h-[25vh] md:h-[45vh] overflow-hidden">
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl('gallery_1.jpg')})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl(commonImages.instagram[0])})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl(commonImages.instagram[3])})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl(commonImages.instagram[1])})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl(commonImages.instagram[4])})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl(commonImages.instagram[2])})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder border-r-[2px] md:border-r-[6px] border-white bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl('gallery_7.jpg')})`}}></div>
-        <div className="flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder bg-cover bg-center" style={{"backgroundImage": `url(${cloudinaryUrl('gallery_8.jpg')})`}}></div>
+        {(pageData?.stripImages?.length ? pageData.stripImages.map((img, i) => sanityImg(img) || '') : ['gallery_1.jpg', commonImages.instagram[0], commonImages.instagram[3], commonImages.instagram[1], commonImages.instagram[4], commonImages.instagram[2], 'gallery_7.jpg', 'gallery_8.jpg'].map((k) => cloudinaryUrl(k))).map((url, i, arr) => (
+          <div key={i} className={`flex-1 hover:flex-[1.5] hover:brightness-110 transition-all duration-500 cursor-pointer bg-brand-placeholder bg-cover bg-center${i < arr.length - 1 ? ' border-r-[2px] md:border-r-[6px] border-white' : ''}`} style={{"backgroundImage": `url(${url})`}}></div>
+        ))}
     </header>
 
     <div className="relative z-10 flex justify-center -mt-[60px] md:-mt-[80px]">
@@ -70,16 +66,20 @@ export default function Index() {
     </div>
 
     <main className="px-5 pt-6 pb-12 max-w-[600px] mx-auto">
-        <h1 className="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">{settings?.title ? `${settings.title} PHOTOGRAPHY`.toUpperCase() : 'DKNOTT PHOTOGRAPHY'}</h1>
-        <p className="text-[0.65rem] tracking-[2px] leading-relaxed mb-11 font-medium text-brand-subtitle uppercase">DOCUMENTARY WEDDING PHOTOGRAPHY & FILMS. 350+ WEDDINGS ACROSS INDIA & ABROAD.</p>
+        <h1 className="font-serif font-normal text-[1.5rem] md:text-[1.8rem] text-brand-title tracking-[2px] mb-3">{`${settings?.title || 'DKNOTT'} ${settings?.description || 'PHOTOGRAPHY'}`.toUpperCase()}</h1>
+        <p className="text-[0.65rem] tracking-[2px] leading-relaxed mb-11 font-medium text-brand-subtitle uppercase">{pageData?.tagline || 'DOCUMENTARY WEDDING PHOTOGRAPHY & FILMS. 350+ WEDDINGS ACROSS INDIA & ABROAD.'}</p>
 
         <div className="flex flex-col gap-4 items-center">
-            <a href="/about" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">ABOUT US</a>
-            <a href="/universe" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">DKNOTT UNIVERSE</a>
-            <a href="/wedding_films" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEDDING FILMS</a>
-            <a href="/real_weddings" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEDDING BLOGS</a>
-            <a href="/home" className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">WEBSITE</a>
-            <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">INSTAGRAM</a>
+            {(pageData?.links?.length ? pageData.links : [
+              {label: 'ABOUT US', href: '/about'},
+              {label: 'DKNOTT UNIVERSE', href: '/universe'},
+              {label: 'WEDDING FILMS', href: '/wedding_films'},
+              {label: 'WEDDING BLOGS', href: '/real_weddings'},
+              {label: 'WEBSITE', href: '/home'},
+              {label: 'INSTAGRAM', href: settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'},
+            ]).map((l, i) => (
+              <a key={i} href={l.href} className="block w-[90%] md:w-full max-w-[480px] bg-brand-btnbg text-white no-underline py-4 px-5 rounded-full text-[0.75rem] font-semibold tracking-[2px] transition-all duration-300 shadow-sm hover:bg-brand-btnhov hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm">{l.label}</a>
+            ))}
         </div>
     </main>
 

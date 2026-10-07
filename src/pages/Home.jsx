@@ -846,7 +846,7 @@ footer.site-footer{
   </svg>
   <div id="splash-text" style={{"marginTop":"25px","textAlign":"center","fontFamily":"var(--sans)","color":"var(--gold)","opacity":"0","transform":"translateY(10px)","transition":"opacity 1s ease-out, transform 1s ease-out"}}>
     <div style={{"letterSpacing":"0.4em","fontSize":"0.85rem","marginBottom":"0.3rem"}}>{siteSettings?.title || 'DKNOTT'}</div>
-    <div style={{"letterSpacing":"0.35em","fontSize":"0.55rem","opacity":"0.75"}}>PHOTOGRAPHY</div>
+    <div style={{"letterSpacing":"0.35em","fontSize":"0.55rem","opacity":"0.75"}}>{siteSettings?.description || 'PHOTOGRAPHY'}</div>
   </div>
 </div>
 
@@ -905,8 +905,8 @@ footer.site-footer{
       </p>
     </div>
     <div style={{ marginTop: "auto", paddingTop: "8vh" }}>
-      <p style={{ fontFamily: "'Spectral', serif", fontStyle: "italic", fontSize: "1.2rem", marginBottom: "0.5rem", color: "#f3f2ee" }}>Truly yours</p>
-      <p style={{ fontFamily: "'Lato', sans-serif", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#f3f2ee", opacity: "0.85" }}>CINEMATIC, VISUAL POETRY, STORY TELLING, ROMANTIC</p>
+      <p style={{ fontFamily: "'Spectral', serif", fontStyle: "italic", fontSize: "1.2rem", marginBottom: "0.5rem", color: "#f3f2ee" }}>{homeData?.heroSignoff || 'Truly yours'}</p>
+      <p style={{ fontFamily: "'Lato', sans-serif", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#f3f2ee", opacity: "0.85" }}>{homeData?.heroTags || 'CINEMATIC, VISUAL POETRY, STORY TELLING, ROMANTIC'}</p>
     </div>
   </div>
 </section>
@@ -961,7 +961,7 @@ footer.site-footer{
           <WeddingCardSlideshow key={wedding.id} wedding={wedding} offset={idx} />
         ))
       ) : (
-        <p style={{ textAlign: 'center', gridColumn: '1 / -1' }}>Loading amazing weddings...</p>
+        <p style={{ textAlign: 'center', gridColumn: '1 / -1' }}>{homeData?.loadingWeddingsText || 'Loading amazing weddings...'}</p>
       )}
     </div>
   </div>
@@ -980,7 +980,7 @@ footer.site-footer{
   
   <img id="testi-bg" src={testimonials[currentTesti].image} onError={handleImageError} alt="Testimonials Background" style={{"position":"absolute","top":"0","left":"0","width":"100%","height":"100%","objectFit":"cover","zIndex":"0","filter":"brightness(0.5)","transition":"opacity 0.4s ease-in-out","opacity": testiFading ? 0 : 1}} />
   <div className="wrap center max-56 mx-auto reveal" style={{"position":"relative","zIndex":"10","width":"100%"}}>
-    <span className="meta" style={{"color":"var(--paper)","display":"block","marginBottom":"1rem","fontSize":"0.65rem","letterSpacing":"0.25em","textTransform":"uppercase"}}>TESTIMONIALS</span>
+    <span className="meta" style={{"color":"var(--paper)","display":"block","marginBottom":"1rem","fontSize":"0.65rem","letterSpacing":"0.25em","textTransform":"uppercase"}}>{homeData?.testimonialsLabel || 'TESTIMONIALS'}</span>
     
     <div id="testimonial-container" style={{"minHeight":"350px","display":"flex","flexDirection":"column","justifyContent":"center","transition":"opacity 0.4s ease-in-out","opacity": testiFading ? 0 : 1}}>
       <h2 id="testimonial-author" style={{"color":"var(--paper)","fontFamily":"var(--serif)","fontSize":"clamp(2rem, 4vw, 2.8rem)","fontWeight":"400","marginBottom":"1.5rem"}}>
@@ -1031,14 +1031,14 @@ footer.site-footer{
     <div className="flex-1 text-center">
       <a href="/real_weddings" style={{"textDecoration":"none"}}>
         <h2 style={{"color":"var(--gold)","marginBottom":"0.5rem","transition":"opacity 0.3s"}} onMouseOver={(e) => e.currentTarget.style.opacity="0.7"} onMouseOut={(e) => e.currentTarget.style.opacity="1"}>REAL<br />WEDDINGS</h2>
-        <span className="meta">VIEW GALLERY</span>
+        <span className="meta">{homeData?.viewGalleryLabel || 'VIEW GALLERY'}</span>
       </a>
     </div>
     <div className="hidden md:block w-px h-24" style={{"backgroundColor":"var(--line-strong)"}}></div>
     <div className="flex-1 text-center">
       <a href="/contact" style={{"textDecoration":"none"}}>
-        <h2 style={{"color":"var(--gold)","marginBottom":"0.5rem","transition":"opacity 0.3s"}} onMouseOver={(e) => e.currentTarget.style.opacity="0.7"} onMouseOut={(e) => e.currentTarget.style.opacity="1"}>CONTACT US</h2>
-        <span className="meta">BOOK YOUR DATE</span>
+        <h2 style={{"color":"var(--gold)","marginBottom":"0.5rem","transition":"opacity 0.3s"}} onMouseOver={(e) => e.currentTarget.style.opacity="0.7"} onMouseOut={(e) => e.currentTarget.style.opacity="1"}>{homeData?.contactUsHeading || 'CONTACT US'}</h2>
+        <span className="meta">{homeData?.bookDateLabel || 'BOOK YOUR DATE'}</span>
       </a>
     </div>
   </div>
@@ -1051,21 +1051,14 @@ footer.site-footer{
  {/*  Instagram Grid  */}
     <div className="mt-12 mb-4">
       <div className="flex justify-center flex-wrap" style={{"gap":"clamp(1rem, 2.5vw, 2.5rem)"}}>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[0])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 1" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[1])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 2" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.heroes.realWeddings)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 3" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[3])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 4" />
-        </a>
-        <a href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-          <img src={cloudinaryUrl(commonImages.instagram[4])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 5" />
-        </a>
+        {(siteSettings?.instagramStripImages?.length
+          ? siteSettings.instagramStripImages.map((img) => sanityImg(img))
+          : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
+        ).map((url, i) => (
+          <a key={i} href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+            <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
+          </a>
+        ))}
       </div>
     </div>
     {/* Main Knot Divider */}
@@ -1087,8 +1080,8 @@ footer.site-footer{
             <img src={sanityImg(siteSettings?.logo) || cloudinaryUrl(commonImages.logos.large)} onError={handleImageError} alt="DKNOTT" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>DKNOTT</p>
-            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>PHOTOGRAPHY</p>
+            <p className="text-sm tracked" style={{"color":"var(--parchment)"}}>{siteSettings?.title || 'DKNOTT'}</p>
+            <p className="text-[10px] tracked" style={{"color":"var(--sage)"}}>{siteSettings?.description || 'PHOTOGRAPHY'}</p>
           </div>
         </div>
         <p className="text-sm leading-relaxed" style={{"color":"var(--sage)","maxWidth":"32ch"}}>
@@ -1098,21 +1091,17 @@ footer.site-footer{
 
       {/*  Navigate  */}
       <div className="md:col-span-4">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{siteSettings?.footerNavHeading || 'Navigate'}</p>
         <ul className="space-y-3 text-sm">
-          <li><a href="/home" className="grain-link" style={{"color":"var(--parchment)"}}>Home</a></li>
-          <li><a href="/about" className="grain-link" style={{"color":"var(--parchment)"}}>About</a></li>
-          <li><a href="/our_story" className="grain-link" style={{"color":"var(--parchment)"}}>Our story</a></li>
-          <li><a href="/wedding_films" className="grain-link" style={{"color":"var(--parchment)"}}>Wedding films</a></li>
-          <li><a href="/real_weddings" className="grain-link" style={{"color":"var(--parchment)"}}>Real weddings</a></li>
-          <li><a href="/client_guide" className="grain-link" style={{"color":"var(--parchment)"}}>Client guide</a></li>
-          <li><a href="/contact" className="grain-link" style={{"color":"var(--parchment)"}}>Let's connect</a></li>
+          {(siteSettings?.footerNavLinks?.length ? siteSettings.footerNavLinks : navLinksFrom(siteSettings)).map((l, i) => (
+            <li key={i}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
+          ))}
         </ul>
       </div>
 
       {/*  Contact  */}
       <div className="md:col-span-3">
-        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
+        <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{siteSettings?.footerStudioHeading || 'Studio'}</p>
         <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
           <li>{siteSettings?.contactAddress || 'Hyderbad, India'}</li>
           <li>{siteSettings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
@@ -1127,16 +1116,16 @@ footer.site-footer{
     {/*  CTA line  */}
     <div className="text-center mt-10">
       <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 3vw, 2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-        Every knot tells a story.<br className="hidden md:block" /> Let's start yours.
+        {siteSettings?.footerCtaLine1 || 'Every knot tells a story.'}<br className="hidden md:block" /> {siteSettings?.footerCtaLine2 || "Let's start yours."}
       </p>
-      <a href="/contact" className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
-        Enquire about your date
+      <a href={siteSettings?.footerCtaHref || "/contact"} className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
+        {siteSettings?.footerCtaButton || 'Enquire about your date'}
       </a>
     </div>
 
     {/*  Bottom bar  */}
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10 pt-4" style={{"borderTop":"1px solid rgba(199,163,105,0.15)"}}>
-      <p className="text-xs" style={{"color":"var(--sage)"}}>© 2026 DKNOTT Photography. All rights reserved.</p>
+      <p className="text-xs" style={{"color":"var(--sage)"}}>{siteSettings?.footerText || '© 2026 DKNOTT Photography. All rights reserved.'}</p>
       <div className="flex items-center gap-6">
          <a href="https://www.instagram.com/dknottphotography" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Instagram">
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -1144,7 +1133,7 @@ footer.site-footer{
         <a href="https://www.pinterest.com/dknottphotography" className="text-xs tracked" style={{"color":"var(--parchment)","opacity":"0.8","transition":"opacity 0.3s","padding":"0.2rem"}} onMouseOver={(e) => e.currentTarget.style.opacity="1"} onMouseOut={(e) => e.currentTarget.style.opacity="0.8"} aria-label="Pinterest">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.163 0 7.398 2.967 7.398 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
         </a>
-        <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label="Back to top">
+        <button onClick={() => window.scrollTo({top:0,behavior:"smooth"})} className="w-8 h-8 rounded-full flex items-center justify-center transition" style={{"border":"1px solid rgba(199,163,105,0.3)","color":"var(--gold)"}} aria-label={siteSettings?.backToTopLabel || "Back to top"}>
           ↑
         </button>
       </div>

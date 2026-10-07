@@ -321,7 +321,12 @@ export default function About() {
   }, [isPausedNotes, totalNotes]);
 
   const films = (pageData?.weddingFilms && pageData.weddingFilms.length)
-    ? pageData.weddingFilms
+    ? pageData.weddingFilms.map((f) => ({
+        id: f.videoId,
+        title: f.title,
+        subtitle: f.subtitle,
+        thumb: sanityImg(f.thumbnail) || (f.videoId ? `https://img.youtube.com/vi/${f.videoId}/maxresdefault.jpg` : ''),
+      }))
     : DEFAULT_FILMS;
   const currentFilm = films[filmIdx] || films[0];
   const totalFilms = films.length;
@@ -1631,7 +1636,7 @@ header.site-nav{
           alt="DKNOTT Photography"
         />
         <div className="ab-hero-content">
-          <h1 className="ab-hero-heading">DKNOTT PHOTOGRAPHY</h1>
+          <h1 className="ab-hero-heading">{settings?.title || 'DKNOTT'} {settings?.description || 'PHOTOGRAPHY'}</h1>
         </div>
       </section>
 
@@ -1754,7 +1759,7 @@ header.site-nav{
         </div>
 
         {/* Section Title */}
-        <h2 className="ab-blogs-heading reveal">BLOGS</h2>
+        <h2 className="ab-blogs-heading reveal">{pageData?.blogsHeading || 'BLOGS'}</h2>
 
         {/* Featured Blog Slider (one by one sliding left to right) */}
         <div
@@ -1823,7 +1828,7 @@ header.site-nav{
           </div>
 
           <a href={featuredBlogLink} className="ab-view-post-link">
-            VIEW POST HERE
+            {pageData?.viewPostLabel || 'VIEW POST HERE'}
           </a>
         </div>
       </section>
@@ -1840,7 +1845,7 @@ header.site-nav{
         onTouchEnd={() => setIsPausedNotes(false)}
       >
         <div className="ab-notes-inner">
-          <h2 className="ab-notes-title reveal">LOVE NOTES</h2>
+          <h2 className="ab-notes-title reveal">{pageData?.loveNotesHeading || 'LOVE NOTES'}</h2>
 
           <div className="ab-notes-layout">
             {/* Left Chevron */}
@@ -1909,7 +1914,7 @@ header.site-nav{
         onTouchEnd={() => setIsPausedFilms(false)}
       >
         <div className="wrap">
-          <h2 className="ab-films-heading reveal">WEDDING FILMS</h2>
+          <h2 className="ab-films-heading reveal">{pageData?.filmsHeading || 'WEDDING FILMS'}</h2>
 
           <div className="ab-films-carousel-wrap reveal">
             <button
@@ -1982,7 +1987,7 @@ header.site-nav{
 
           <div>
             <a href="/wedding_films" className="ab-films-btn-link reveal">
-              WEDDING FILMS
+              {pageData?.filmsCtaLabel || 'WEDDING FILMS'}
             </a>
           </div>
         </div>
@@ -2030,16 +2035,16 @@ header.site-nav{
             </div>
             {/* Navigate */}
             <div>
-              <p style={{ margin: '0 0 1.25rem', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>Navigate</p>
+              <p style={{ margin: '0 0 1.25rem', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>{settings?.footerNavHeading || 'Navigate'}</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.88rem' }}>
-                {navLinksFrom(settings).map((l) => (
+                {(settings?.footerNavLinks?.length ? settings.footerNavLinks : navLinksFrom(settings)).map((l) => (
                   <li key={l.href}><a href={l.href} className="grain-link" style={{ color: 'var(--parchment)' }}>{l.label}</a></li>
                 ))}
               </ul>
             </div>
             {/* Studio */}
             <div>
-              <p style={{ margin: '0 0 1.25rem', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>Studio</p>
+              <p style={{ margin: '0 0 1.25rem', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>{settings?.footerStudioHeading || 'Studio'}</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.88rem', color: 'var(--parchment)' }}>
                 <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
                 <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
@@ -2051,10 +2056,10 @@ header.site-nav{
           {/* CTA line */}
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
             <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem,3vw,2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-              Every knot tells a story.<br />Let's start yours.
+              {settings?.footerCtaLine1 || 'Every knot tells a story.'}<br />{settings?.footerCtaLine2 || "Let's start yours."}
             </p>
-            <a href="/contact" className="grain-link" style={{ display: 'inline-block', marginTop: '1.5rem', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>
-              Enquire about your date
+            <a href={settings?.footerCtaHref || "/contact"} className="grain-link" style={{ display: 'inline-block', marginTop: '1.5rem', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)' }}>
+              {settings?.footerCtaButton || 'Enquire about your date'}
             </a>
           </div>
 

@@ -84,10 +84,27 @@ function SiteTheme() {
   return null;
 }
 
+/** Sets the browser tab title from Sanity `siteSettings.browserTabTitle`. */
+function SiteTabTitle() {
+  const { data: settings } = useSanityDoc('siteSettings');
+
+  React.useEffect(() => {
+    try {
+      const t = typeof settings?.browserTabTitle === 'string' && settings.browserTabTitle.trim()
+        ? settings.browserTabTitle.trim()
+        : 'DKNOTT Photography';
+      if (document.title !== t) document.title = t;
+    } catch (e) { /* never break rendering */ }
+  }, [settings]);
+
+  return null;
+}
+
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SiteTheme />
+      <SiteTabTitle />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<About />} />

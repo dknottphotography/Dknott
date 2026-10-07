@@ -27,6 +27,22 @@ const STORY_IMAGES = {
   portraitFour: 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790524452/0.jpg',
 };
 
+/* ─── Style Pillars (fallback) ─────────────────────────── */
+const STYLE_PILLARS = [
+  {title: 'Elegant', subtitle: 'When it needs to be'},
+  {title: 'Emotional', subtitle: 'When it matters most'},
+  {title: 'Unscripted', subtitle: 'Whenever possible'},
+  {title: 'Cinematic', subtitle: 'Throughout every film & frame'},
+];
+
+/* ─── Instinct bullets (fallback) ─────────────────────── */
+const INSTINCT_POINTS = [
+  {lead: 'The ability to anticipate a moment', rest: 'before it happens.'},
+  {lead: 'The ability to understand', rest: 'when to step forward and when to disappear.'},
+  {lead: 'The ability to recognize raw emotion', rest: 'in a fraction of a second.'},
+  {lead: 'And most importantly, the ability', rest: "to tell a family's story without taking away from the people who are living it."},
+];
+
 /* ─── 12-Year Lessons (Pillars) ─────────────────────────── */
 const LESSON_PILLARS = [
   {
@@ -54,6 +70,15 @@ const LESSON_PILLARS = [
 export default function OurStory() {
   const { data } = useSanityDoc('ourStoryPage');
   const { data: settings } = useSanityDoc('siteSettings');
+  /* Split a Sanity multi-paragraph text field (blank-line separated) */
+  const paras = (text) => String(text || '').split(/\n\n+/).map((s) => s.trim()).filter(Boolean);
+  const paraOr = (arr, i, fallback) => (arr[i] !== undefined && arr[i] !== '' ? arr[i] : fallback);
+  const journeyParas = paras(data?.journeyBody);
+  const philosophyParas = paras(data?.philosophyBody);
+  const craftParas = paras(data?.craftBody);
+  const instinctParas = paras(data?.instinctBody);
+  const purposeParas = paras(data?.purposeBody);
+  const pullquoteLines = paras(data?.philosophyPullquote);
   /* Nav + scroll-reveal */
   useEffect(() => {
     if (window.__OurStoryScriptLoaded) return;
@@ -688,10 +713,10 @@ footer p{ margin: 0; }
           <span className="eyebrow white">{data?.heroEyebrow || 'OUR STORY · 12 YEARS BEHIND THE LENS'}</span>
           <h1>{data?.heroHeading || 'DAVOOD'}</h1>
           <p className="story-hero-sub">
-            An Unconventional Storyteller &bull; Luxury Indian Wedding &amp; Documentary Photographer
+            {data?.heroSubheading || 'An Unconventional Storyteller \u2022 Luxury Indian Wedding & Documentary Photographer'}
           </p>
           <blockquote className="story-hero-quote">
-            "Every photograph has a story. But some stories are not meant to be simply photographed — they are meant to be felt."
+            {data?.heroQuote || '"Every photograph has a story. But some stories are not meant to be simply photographed \u2014 they are meant to be felt."'}
           </blockquote>
         </div>
       </section>
@@ -700,34 +725,34 @@ footer p{ margin: 0; }
       <section className="section">
         <div className="wrap grid-editorial">
           <div className="reveal">
-            <span className="eyebrow">BUILT ONE FRAME AT A TIME</span>
-            <h2>Understanding People, Traditions &amp; Fleeting Emotions</h2>
+            <span className="eyebrow">{data?.journeyEyebrow || 'BUILT ONE FRAME AT A TIME'}</span>
+            <h2>{data?.journeyHeading || 'Understanding People, Traditions & Fleeting Emotions'}</h2>
             <p className="lede">
-              For Davood, photography was never just about owning a camera, finding the perfect frame, or creating beautiful pictures.
+              {paraOr(journeyParas, 0, 'For Davood, photography was never just about owning a camera, finding the perfect frame, or creating beautiful pictures.')}
             </p>
             <p>
-              It became a way of understanding people, emotions, traditions, relationships, and those tiny moments that often disappear before anyone realizes how meaningful they were.
+              {paraOr(journeyParas, 1, 'It became a way of understanding people, emotions, traditions, relationships, and those tiny moments that often disappear before anyone realizes how meaningful they were.')}
             </p>
             <p>
-              For more than 12 years, this journey has been built one frame at a time — through countless weddings, endless hours of preparation, unpredictable moments, late nights, early mornings, difficult situations, beautiful celebrations, and thousands of memories entrusted by families.
+              {paraOr(journeyParas, 2, 'For more than 12 years, this journey has been built one frame at a time \u2014 through countless weddings, endless hours of preparation, unpredictable moments, late nights, early mornings, difficult situations, beautiful celebrations, and thousands of memories entrusted by families.')}
             </p>
             <p>
-              The journey was never about reaching a position overnight. It was about starting from the beginning, learning through every experience, making mistakes, improving with every wedding, understanding light, mastering composition, observing people, studying emotions, experimenting with visual storytelling, and constantly searching for a more honest way to photograph a wedding.
+              {paraOr(journeyParas, 3, 'The journey was never about reaching a position overnight. It was about starting from the beginning, learning through every experience, making mistakes, improving with every wedding, understanding light, mastering composition, observing people, studying emotions, experimenting with visual storytelling, and constantly searching for a more honest way to photograph a wedding.')}
             </p>
             <p style={{ fontWeight: 500, color: 'var(--ink)' }}>
-              Over the years, that dedication slowly became a signature.
+              {paraOr(journeyParas, 4, 'Over the years, that dedication slowly became a signature.')}
             </p>
           </div>
 
           <div className="reveal" style={{ transitionDelay: '0.15s' }}>
             <div className="story-img-frame">
               <img
-                src={STORY_IMAGES.portraitOne}
+                src={sanityImg(data?.journeyImage) || STORY_IMAGES.portraitOne}
                 onError={handleImageError}
                 alt="Davood - Documentary Wedding Photographer"
               />
             </div>
-            <div className="story-img-caption">Davood &bull; 12+ Years Documenting Real Moments</div>
+            <div className="story-img-caption">{data?.journeyCaption || 'Davood \u2022 12+ Years Documenting Real Moments'}</div>
           </div>
         </div>
       </section>
@@ -736,13 +761,13 @@ footer p{ margin: 0; }
       <section className="section blush tight">
         <div className="wrap">
           <div className="story-quote-box reveal">
-            <span className="eyebrow" style={{ color: 'var(--oxblood)' }}>THE MOMENTS THAT MATTER</span>
-            <h2>"A wedding is never just a wedding."</h2>
+            <span className="eyebrow" style={{ color: 'var(--oxblood)' }}>{data?.calloutEyebrow || 'THE MOMENTS THAT MATTER'}</span>
+            <h2>{data?.calloutQuote || '"A wedding is never just a wedding."'}</h2>
             <p>
-              It is a bride quietly waiting before she walks into a new chapter of her life. It is a father trying to hold back his emotions. It is a mother fixing her daughter's outfit one last time. It is a groom surrounded by friends, unaware that years later he will look back at that exact moment and remember the laughter. It is grandparents watching generations come together. It is a child running through a celebration without knowing that someone has just captured a memory the family will treasure forever.
+              {data?.calloutBody || 'It is a bride quietly waiting before she walks into a new chapter of her life.'} It is a father trying to hold back his emotions. It is a mother fixing her daughter's outfit one last time. It is a groom surrounded by friends, unaware that years later he will look back at that exact moment and remember the laughter. It is grandparents watching generations come together. It is a child running through a celebration without knowing that someone has just captured a memory the family will treasure forever.
             </p>
             <span className="story-quote-highlight">
-              These are the moments that matter. And these are the moments worth chasing.
+              {data?.calloutHighlight || 'These are the moments that matter. And these are the moments worth chasing.'}
             </span>
           </div>
         </div>
@@ -754,32 +779,32 @@ footer p{ margin: 0; }
           <div className="reveal" style={{ transitionDelay: '0.15s' }}>
             <div className="story-img-frame">
               <img
-                src={STORY_IMAGES.portraitTwo}
+                src={sanityImg(data?.philosophyImage) || STORY_IMAGES.portraitTwo}
                 onError={handleImageError}
                 alt="Davood observing the wedding celebration"
               />
             </div>
-            <div className="story-img-caption">The Invisible Observer &bull; Quiet Observation</div>
+            <div className="story-img-caption">{data?.philosophyCaption || 'The Invisible Observer \u2022 Quiet Observation'}</div>
           </div>
 
           <div className="reveal">
-            <span className="eyebrow">THE PHILOSOPHY</span>
-            <h2>Do Not Force a Moment When You Can Discover a Real One</h2>
+            <span className="eyebrow">{data?.philosophyEyebrow || 'THE PHILOSOPHY'}</span>
+            <h2>{data?.philosophyHeading || 'Do Not Force a Moment When You Can Discover a Real One'}</h2>
             <p className="lede">
-              Today, Davood is known for an unconventional approach to Indian wedding photography — where luxury meets authenticity, where cinematic visuals meet documentary storytelling, and where photographs are created not merely to look beautiful, but to preserve how a moment actually felt.
+              {paraOr(philosophyParas, 0, 'Today, Davood is known for an unconventional approach to Indian wedding photography \u2014 where luxury meets authenticity, where cinematic visuals meet documentary storytelling, and where photographs are created not merely to look beautiful, but to preserve how a moment actually felt.')}
             </p>
             <p>
-              Instead of turning every wedding into a perfectly rehearsed production, the approach focuses on observing what is naturally happening and transforming those authentic moments into timeless visual stories.
+              {paraOr(philosophyParas, 1, 'Instead of turning every wedding into a perfectly rehearsed production, the approach focuses on observing what is naturally happening and transforming those authentic moments into timeless visual stories.')}
             </p>
             <div style={{ background: 'var(--paper-deep)', padding: '1.4rem 1.8rem', borderLeft: '3px solid var(--oxblood)', margin: '1.8rem 0', borderRadius: '0 4px 4px 0' }}>
               <p style={{ margin: 0, fontStyle: 'italic', fontFamily: 'var(--serif)', fontSize: '1.1rem', color: 'var(--ink)' }}>
-                The camera becomes almost invisible.<br />
-                The photographer watches. He waits. He observes.<br />
-                And when the right moment arrives — a glance, a smile, a tear, a touch, a laugh, a silence — the frame is created.
+                {(pullquoteLines.length ? pullquoteLines : ['The camera becomes almost invisible.', 'The photographer watches. He waits. He observes.', 'And when the right moment arrives \u2014 a glance, a smile, a tear, a touch, a laugh, a silence \u2014 the frame is created.']).map((line, i, arr) => (
+                  <React.Fragment key={i}>{line}{i < arr.length - 1 && <br />}</React.Fragment>
+                ))}
               </p>
             </div>
             <p>
-              This documentary influence is at the heart of the work. But storytelling does not mean compromising on luxury.
+              {paraOr(philosophyParas, 2, 'This documentary influence is at the heart of the work. But storytelling does not mean compromising on luxury.')}
             </p>
           </div>
         </div>
@@ -789,34 +814,24 @@ footer p{ margin: 0; }
       <section className="section deep">
         <div className="wrap">
           <div className="reveal" style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span className="eyebrow gold">WHERE LUXURY MEETS AUTHENTICITY</span>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>Cinematic Visuals, Extraordinary Scale</h2>
+            <span className="eyebrow gold">{data?.craftEyebrow || 'WHERE LUXURY MEETS AUTHENTICITY'}</span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{data?.craftHeading || 'Cinematic Visuals, Extraordinary Scale'}</h2>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.85' }}>
-              Indian weddings are celebrations of extraordinary scale, culture, craftsmanship, fashion, architecture, traditions, and emotion. From grand mandaps and magnificent venues to couture outfits, jewellery, floral installations, intimate ceremonies, and spectacular receptions, every detail deserves to be photographed with intention.
+              {paraOr(craftParas, 0, 'Indian weddings are celebrations of extraordinary scale, culture, craftsmanship, fashion, architecture, traditions, and emotion. From grand mandaps and magnificent venues to couture outfits, jewellery, floral installations, intimate ceremonies, and spectacular receptions, every detail deserves to be photographed with intention.')}
             </p>
             <p style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
-              That is where the visual language becomes cinematic. Light is carefully observed. Composition is deliberately created. Movement, depth, atmosphere, colour, architecture, and emotion come together to create photographs that feel larger than the moment itself.
+              {paraOr(craftParas, 1, 'That is where the visual language becomes cinematic. Light is carefully observed. Composition is deliberately created. Movement, depth, atmosphere, colour, architecture, and emotion come together to create photographs that feel larger than the moment itself.')}
             </p>
           </div>
 
           {/* 4 Pillars of the Style */}
           <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', textAlign: 'center' }}>
-            <div style={{ padding: '2rem 1.5rem', border: '1px solid rgba(248,243,233,0.18)', borderRadius: '4px', background: 'rgba(255,255,255,0.03)' }}>
-              <h3 style={{ color: 'var(--gold-light)', fontSize: '1.15rem', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Elegant</h3>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: 'rgba(248,243,233,0.7)' }}>When it needs to be</p>
-            </div>
-            <div style={{ padding: '2rem 1.5rem', border: '1px solid rgba(248,243,233,0.18)', borderRadius: '4px', background: 'rgba(255,255,255,0.03)' }}>
-              <h3 style={{ color: 'var(--gold-light)', fontSize: '1.15rem', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Emotional</h3>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: 'rgba(248,243,233,0.7)' }}>When it matters most</p>
-            </div>
-            <div style={{ padding: '2rem 1.5rem', border: '1px solid rgba(248,243,233,0.18)', borderRadius: '4px', background: 'rgba(255,255,255,0.03)' }}>
-              <h3 style={{ color: 'var(--gold-light)', fontSize: '1.15rem', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Unscripted</h3>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: 'rgba(248,243,233,0.7)' }}>Whenever possible</p>
-            </div>
-            <div style={{ padding: '2rem 1.5rem', border: '1px solid rgba(248,243,233,0.18)', borderRadius: '4px', background: 'rgba(255,255,255,0.03)' }}>
-              <h3 style={{ color: 'var(--gold-light)', fontSize: '1.15rem', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Cinematic</h3>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: 'rgba(248,243,233,0.7)' }}>Throughout every film &amp; frame</p>
-            </div>
+            {(data?.stylePillars?.length ? data.stylePillars : STYLE_PILLARS).map((sp, i) => (
+              <div key={i} style={{ padding: '2rem 1.5rem', border: '1px solid rgba(248,243,233,0.18)', borderRadius: '4px', background: 'rgba(255,255,255,0.03)' }}>
+                <h3 style={{ color: 'var(--gold-light)', fontSize: '1.15rem', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{sp.title}</h3>
+                <p style={{ margin: 0, fontSize: '0.88rem', color: 'rgba(248,243,233,0.7)' }}>{sp.subtitle}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -825,10 +840,10 @@ footer p{ margin: 0; }
       <section className="section">
         <div className="wrap">
           <div className="reveal" style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto' }}>
-            <span className="eyebrow">LESSONS FROM THE CRAFT</span>
-            <h2>Twelve Years of Constant Learning</h2>
+            <span className="eyebrow">{data?.lessonsEyebrow || 'LESSONS FROM THE CRAFT'}</span>
+            <h2>{data?.lessonsHeading || 'Twelve Years of Constant Learning'}</h2>
             <p>
-              Over these twelve years, every wedding has taught something different. This constant learning became an essential part of the journey. Because photography is never finished — there is always another light to understand, another story to discover, another family to meet, and another frame that has never been created before.
+              {data?.lessonsIntro || 'Over these twelve years, every wedding has taught something different. This constant learning became an essential part of the journey. Because photography is never finished \u2014 there is always another light to understand, another story to discover, another family to meet, and another frame that has never been created before.'}
             </p>
           </div>
 
@@ -857,35 +872,34 @@ footer p{ margin: 0; }
       <section className="section tight">
         <div className="wrap grid-editorial">
           <div className="reveal">
-            <span className="eyebrow" style={{ color: 'var(--oxblood)' }}>BEHIND THE SCENES &bull; THE INSTINCT</span>
-            <h2>More Than Experience — Built on Hard Work &amp; Instinct</h2>
+            <span className="eyebrow" style={{ color: 'var(--oxblood)' }}>{data?.instinctEyebrow || 'BEHIND THE SCENES \u2022 THE INSTINCT'}</span>
+            <h2>{data?.instinctHeading || 'More Than Experience \u2014 Built on Hard Work & Instinct'}</h2>
             <p className="lede">
-              Behind the photographs is also a story of hard work. The glamorous final image is only a small part of what happens behind the scenes.
+              {paraOr(instinctParas, 0, 'Behind the photographs is also a story of hard work. The glamorous final image is only a small part of what happens behind the scenes.')}
             </p>
             <p>
-              There are long hours of preparation, travelling, planning, equipment checks, location scouting, understanding timelines, coordinating with teams, waiting for the right light, working through challenging conditions, and spending countless hours after the wedding carefully selecting, editing, and refining every image.
+              {paraOr(instinctParas, 1, 'There are long hours of preparation, travelling, planning, equipment checks, location scouting, understanding timelines, coordinating with teams, waiting for the right light, working through challenging conditions, and spending countless hours after the wedding carefully selecting, editing, and refining every image.')}
             </p>
             <p>
-              Twelve years of this work have built more than experience. They have built instinct:
+              {paraOr(instinctParas, 2, 'Twelve years of this work have built more than experience. They have built instinct:')}
             </p>
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1.8rem', listStyle: 'disc' }}>
-              <li style={{ marginBottom: '0.6rem', color: 'var(--ink)' }}><strong>The ability to anticipate a moment</strong> before it happens.</li>
-              <li style={{ marginBottom: '0.6rem', color: 'var(--ink)' }}><strong>The ability to understand</strong> when to step forward and when to disappear.</li>
-              <li style={{ marginBottom: '0.6rem', color: 'var(--ink)' }}><strong>The ability to recognize raw emotion</strong> in a fraction of a second.</li>
-              <li style={{ marginBottom: '0.6rem', color: 'var(--ink)' }}><strong>And most importantly, the ability</strong> to tell a family's story without taking away from the people who are living it.</li>
+              {(data?.instinctPoints?.length ? data.instinctPoints : INSTINCT_POINTS).map((pt, i) => (
+                <li key={i} style={{ marginBottom: '0.6rem', color: 'var(--ink)' }}><strong>{pt.lead}</strong> {pt.rest}</li>
+              ))}
             </ul>
           </div>
 
           <div className="reveal" style={{ transitionDelay: '0.15s' }}>
             <div className="story-img-frame">
               <img
-                src={STORY_IMAGES.portraitThree}
+                src={sanityImg(data?.instinctImage) || STORY_IMAGES.portraitThree}
                 onError={handleImageError}
                 alt="Davood on location - Preparation, Scouting and Craft"
                 style={{ objectPosition: 'center 55%' }}
               />
             </div>
-            <div className="story-img-caption">On Location &bull; Preparation, Scouting &amp; Craft</div>
+            <div className="story-img-caption">{data?.instinctCaption || 'On Location \u2022 Preparation, Scouting & Craft'}</div>
           </div>
         </div>
       </section>
@@ -905,30 +919,30 @@ footer p{ margin: 0; }
           <div className="reveal" style={{ transitionDelay: '0.15s' }}>
             <div className="story-img-frame">
               <img
-                src={STORY_IMAGES.portraitFour}
+                src={sanityImg(data?.purposeImage) || STORY_IMAGES.portraitFour}
                 onError={handleImageError}
                 alt="Davood - Preserving Memories for Generations"
                 style={{ objectPosition: 'center 65%' }}
               />
             </div>
-            <div className="story-img-caption">A Visual Legacy &bull; Preserving Memories for Generations</div>
+            <div className="story-img-caption">{data?.purposeCaption || 'A Visual Legacy \u2022 Preserving Memories for Generations'}</div>
           </div>
 
           <div className="reveal">
-            <span className="eyebrow gold">THE PURPOSE</span>
-            <h2>Creating a Visual Legacy Across Generations</h2>
+            <span className="eyebrow gold">{data?.purposeEyebrow || 'THE PURPOSE'}</span>
+            <h2>{data?.purposeHeading || 'Creating a Visual Legacy Across Generations'}</h2>
             <p className="lede">
-              For Davood, success is not simply measured by how many weddings have been photographed. It is measured by how many families trusted the camera with their memories.
+              {paraOr(purposeParas, 0, 'For Davood, success is not simply measured by how many weddings have been photographed. It is measured by how many families trusted the camera with their memories.')}
             </p>
             <p>
-              How many couples looked at their photographs years later and felt the same emotion again. How many parents found themselves emotional while watching their children begin a new chapter. And how many ordinary seconds became extraordinary memories because they were preserved forever.
+              {paraOr(purposeParas, 1, 'How many couples looked at their photographs years later and felt the same emotion again. How many parents found themselves emotional while watching their children begin a new chapter. And how many ordinary seconds became extraordinary memories because they were preserved forever.')}
             </p>
             <p>
-              Today, the vision is bigger than simply documenting weddings. It is about creating a visual legacy — a collection of photographs and films that can travel through generations: from the couple, to their children, and eventually to their grandchildren.
+              {paraOr(purposeParas, 2, 'Today, the vision is bigger than simply documenting weddings. It is about creating a visual legacy \u2014 a collection of photographs and films that can travel through generations: from the couple, to their children, and eventually to their grandchildren.')}
             </p>
             <div style={{ background: 'var(--paper-deep)', padding: '1.4rem 1.8rem', borderLeft: '3px solid var(--gold)', margin: '1.8rem 0 0', borderRadius: '0 4px 4px 0' }}>
               <p style={{ margin: 0, fontStyle: 'italic', fontFamily: 'var(--serif)', fontSize: '1.1rem', color: 'var(--ink)', lineHeight: '1.7' }}>
-                "Because a wedding photograph should not only belong to the year it was created. It should belong to the family. It should survive changing trends, changing technology, and changing generations."
+                {data?.purposeQuote || '"Because a wedding photograph should not only belong to the year it was created. It should belong to the family. It should survive changing trends, changing technology, and changing generations."'}
               </p>
             </div>
           </div>
@@ -945,14 +959,14 @@ footer p{ margin: 0; }
               </svg>
             </span>
             <p style={{ fontStyle: 'italic', fontFamily: 'var(--serif)', fontSize: 'clamp(1.1rem, 1.8vw, 1.35rem)', color: 'var(--ink)', lineHeight: '1.7', marginBottom: '2rem' }}>
-              "After more than 12 years behind the lens, the journey continues with the same hunger to learn, the same respect for every story, and the same belief that there is always one more unforgettable moment waiting to be captured."
+              {data?.closingQuote || '"After more than 12 years behind the lens, the journey continues with the same hunger to learn, the same respect for every story, and the same belief that there is always one more unforgettable moment waiting to be captured."'}
             </p>
-            <h2 className="story-signature-name">DAVOOD</h2>
+            <h2 className="story-signature-name">{data?.closingName || 'DAVOOD'}</h2>
             <p className="story-signature-title">
-              Unconventional Storyteller &bull; Luxury Indian Weddings &bull; Documentary Photography
+              {data?.closingTitle || 'Unconventional Storyteller \u2022 Luxury Indian Weddings \u2022 Documentary Photography'}
             </p>
             <p className="story-signature-tagline">
-              Capturing what happened. Preserving how it felt.
+              {data?.closingTagline || 'Capturing what happened. Preserving how it felt.'}
             </p>
           </div>
         </div>
@@ -965,21 +979,16 @@ footer p{ margin: 0; }
           {/*  Instagram Grid  */}
           <div className="mt-12 mb-4">
             <div className="flex justify-center flex-wrap" style={{"gap":"clamp(1rem, 2.5vw, 2.5rem)"}}>
-              <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-                <img src={cloudinaryUrl(commonImages.instagram[0])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 1" />
-              </a>
-              <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-                <img src={cloudinaryUrl(commonImages.instagram[1])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 2" />
-              </a>
-              <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-                <img src={cloudinaryUrl(commonImages.heroes.realWeddings)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 3" />
-              </a>
-              <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-                <img src={cloudinaryUrl(commonImages.instagram[3])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 4" />
-              </a>
-              <a href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
-                <img src={cloudinaryUrl(commonImages.instagram[4])} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt="Instagram 5" />
-              </a>
+              
+        {(settings?.instagramStripImages?.length
+          ? settings.instagramStripImages.map((img) => sanityImg(img))
+          : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
+        ).map((url, i) => (
+          <a key={i} href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+            <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
+          </a>
+        ))}
+      
             </div>
           </div>
           {/* Main Knot Divider */}
@@ -1012,9 +1021,9 @@ footer p{ margin: 0; }
 
             {/*  Navigate  */}
             <div className="md:col-span-4">
-              <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Navigate</p>
+              <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerNavHeading || 'Navigate'}</p>
               <ul className="space-y-3 text-sm">
-              {navLinksFrom(settings).map((l) => (
+              {(settings?.footerNavLinks?.length ? settings.footerNavLinks : navLinksFrom(settings)).map((l) => (
                 <li key={l.href}><a href={l.href} className="grain-link" style={{"color":"var(--parchment)"}}>{l.label}</a></li>
               ))}
             </ul>
@@ -1022,7 +1031,7 @@ footer p{ margin: 0; }
 
             {/*  Contact  */}
             <div className="md:col-span-3">
-              <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>Studio</p>
+              <p className="text-[11px] tracked-lg uppercase mb-5" style={{"color":"var(--gold)"}}>{settings?.footerStudioHeading || 'Studio'}</p>
               <ul className="space-y-3 text-sm" style={{"color":"var(--parchment)"}}>
                 <li>{settings?.contactAddress || 'Hyderabad, India'}</li>
                 <li>{settings?.contactEmail || 'dknottphotography3@gmail.com'}</li>
@@ -1035,10 +1044,10 @@ footer p{ margin: 0; }
           {/*  CTA line  */}
           <div className="text-center mt-10">
             <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 3vw, 2.75rem)', lineHeight: 1.3, color: 'var(--parchment)', margin: 0 }}>
-              Every knot tells a story.<br className="hidden md:block" /> Let's start yours.
+              {settings?.footerCtaLine1 || 'Every knot tells a story.'}<br className="hidden md:block" /> {settings?.footerCtaLine2 || "Let's start yours."}
             </p>
-            <a href="/contact" className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
-              Enquire about your date
+            <a href={settings?.footerCtaHref || "/contact"} className="inline-block mt-6 text-xs tracked-lg uppercase grain-link" style={{"color":"var(--gold)"}}>
+              {settings?.footerCtaButton || 'Enquire about your date'}
             </a>
           </div>
 

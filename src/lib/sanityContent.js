@@ -1,4 +1,5 @@
 import { cloudinaryUrl } from './cloudinary';
+import { stegaClean } from '@sanity/client/stega';
 
 /**
  * Shared Sanity content helpers. Everything here degrades gracefully:
@@ -9,7 +10,10 @@ import { cloudinaryUrl } from './cloudinary';
 export function sanityImg(asset) {
   if (!asset) return '';
   if (typeof asset === 'string') return cloudinaryUrl(asset);
-  return asset.secure_url || asset.url || '';
+  // stegaClean: in Studio preview mode Sanity strings can carry invisible
+  // stega characters; a URL built from one would not load. No-op for
+  // normal live content.
+  return stegaClean(asset.secure_url || asset.url || '');
 }
 
 /**

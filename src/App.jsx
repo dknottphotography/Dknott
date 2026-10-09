@@ -10,6 +10,9 @@ import Contact from './pages/Contact'
 import LinkTree from './pages/Index'
 import Universe from './pages/Universe'
 import { useSanityDoc } from './lib/useSanityDoc'
+import { sanityImg } from './lib/sanityContent'
+import { cloudinaryUrl } from './lib/cloudinary'
+import { commonImages } from './data/images'
 import { isPreviewMode } from './sanity'
 import { stegaClean } from '@sanity/client/stega'
 
@@ -109,7 +112,7 @@ function SiteTheme() {
   return null;
 }
 
-/** Sets the browser tab title from Sanity `siteSettings.browserTabTitle`. */
+/** Sets the browser tab title + icon from Sanity site settings. */
 function SiteTabTitle() {
   const { data: settings } = useSanityDoc('siteSettings');
 
@@ -119,6 +122,18 @@ function SiteTabTitle() {
         ? stegaClean(settings.browserTabTitle).trim()
         : 'DKNOTT Photography';
       if (document.title !== t) document.title = t;
+      // Tab icon follows the panel logo (Site Settings -> Brand -> Logo
+      // Image), falling back to the built-in logo so the tab always shows it.
+      const icon = sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.nav);
+      if (icon) {
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+          link = document.createElement('link');
+          link.rel = 'icon';
+          document.head.appendChild(link);
+        }
+        if (link.getAttribute('href') !== icon) link.setAttribute('href', icon);
+      }
     } catch (e) { /* never break rendering */ }
   }, [settings]);
 

@@ -304,7 +304,11 @@ export default function About() {
   const featuredBlogLink = pageData?.featuredBlogLink || '/real_weddings';
 
   const notes = (pageData?.loveNotes && pageData.loveNotes.length)
-    ? pageData.loveNotes.map(n => ({ couple: n.couple, quote: n.quote, photoSrc: n.photo?.secure_url }))
+    ? pageData.loveNotes.map((n, i) => ({
+        couple: n.couple || DEFAULT_NOTES[i % DEFAULT_NOTES.length].couple,
+        quote: n.quote || DEFAULT_NOTES[i % DEFAULT_NOTES.length].quote,
+        photoSrc: sanityImg(n.photo) || cloudinaryUrl(DEFAULT_NOTES[i % DEFAULT_NOTES.length].photoKey),
+      }))
     : DEFAULT_NOTES.map(n => ({ ...n, photoSrc: cloudinaryUrl(n.photoKey) }));
 
   const totalNotes = notes.length;

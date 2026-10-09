@@ -10,6 +10,28 @@ import Contact from './pages/Contact'
 import LinkTree from './pages/Index'
 import Universe from './pages/Universe'
 import { useSanityDoc } from './lib/useSanityDoc'
+import { isPreviewMode } from './sanity'
+import { stegaClean } from '@sanity/client/stega'
+
+/**
+ * Studio draft-preview overlays. Only mounted when the site runs inside the
+ * Sanity Studio's Presentation tool (preview mode); the package is imported
+ * lazily so live visitors never download it. If it fails to load for any
+ * reason the page still renders normally, just without edit overlays.
+ */
+function PreviewVisualEditing() {
+  const [VisualEditing, setVisualEditing] = React.useState(null);
+
+  React.useEffect(() => {
+    let alive = true;
+    import('@sanity/visual-editing/react')
+      .then((m) => { if (alive) setVisualEditing(() => m.VisualEditing); })
+      .catch((e) => console.warn('Visual editing overlays unavailable:', e?.message || e));
+    return () => { alive = false; };
+  }, []);
+
+  return VisualEditing ? <VisualEditing /> : null;
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -52,6 +74,9 @@ function SiteTheme() {
     if (!settings) return;
     const root = document.documentElement;
     const set = (name, value) => {
+      // Preview mode: Sanity strings may carry invisible stega characters
+      // that would make a CSS value invalid; strip them (no-op when live).
+      if (typeof value === 'string') value = stegaClean(value);
       if (typeof value === 'string' && value.trim() !== '') {
         try { root.style.setProperty(name, value); } catch (e) { /* ignore */ }
       }
@@ -91,7 +116,7 @@ function SiteTabTitle() {
   React.useEffect(() => {
     try {
       const t = typeof settings?.browserTabTitle === 'string' && settings.browserTabTitle.trim()
-        ? settings.browserTabTitle.trim()
+        ? stegaClean(settings.browserTabTitle).trim()
         : 'DKNOTT Photography';
       if (document.title !== t) document.title = t;
     } catch (e) { /* never break rendering */ }
@@ -106,6 +131,7 @@ function App() {
       <SiteTheme />
       <SiteTabTitle />
       <ScrollToTop />
+      {isPreviewMode && <PreviewVisualEditing />}
       <Routes>
         <Route path="/" element={<About />} />
         <Route path="/about" element={<About />} />

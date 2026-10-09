@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { client } from '../sanity';
+import { client, isPreviewMode } from '../sanity';
 
 /**
  * Fetch a single Sanity document by its _id.
  * Never throws and never breaks rendering: on any error or when the
  * document does not exist, `data` stays null so callers fall back to
  * their hardcoded content.
+ *
+ * In Studio preview mode the query ALSO matches the document's draft id
+ * (drafts.<id>) so unpublished edits render on the site before they are
+ * published; live mode only ever matches the published document.
  *
  * @param {string} docId - the Sanity document _id (e.g. 'siteSettings')
  * @returns {{ data: object|null, loading: boolean, error: Error|null }}
@@ -22,8 +26,14 @@ export function useSanityDoc(docId) {
     }
     let cancelled = false;
     setLoading(true);
+    const query = isPreviewMode
+      ? '*[_id == $id || _id == $draftId][0]'
+      : '*[_id == $id][0]';
+    const params = isPreviewMode
+      ? { id: docId, draftId: `drafts.${docId}` }
+      : { id: docId };
     client
-      .fetch('*[_id == $id][0]', { id: docId })
+      .fetch(query, params)
       .then((d) => {
         if (cancelled) return;
         setData(d || null);

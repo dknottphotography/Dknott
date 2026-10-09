@@ -1055,7 +1055,7 @@ footer.site-footer{
           ? siteSettings.instagramStripImages.map((img) => sanityImg(img))
           : [commonImages.instagram[0], commonImages.instagram[1], commonImages.heroes.realWeddings, commonImages.instagram[3], commonImages.instagram[4]].map((k) => cloudinaryUrl(k))
         ).map((url, i) => (
-          <a key={i} href="#" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
+          <a key={i} href={siteSettings?.instagramUrl || "https://www.instagram.com/dknottphotography"} target="_blank" rel="noopener noreferrer" className="ig-tile relative block" style={{"width":"clamp(100px, 16%, 180px)","aspectRatio":"3/4","borderRadius":"4px"}}>
             <img src={url} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} />
           </a>
         ))}

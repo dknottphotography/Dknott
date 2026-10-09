@@ -74,8 +74,11 @@ export default defineConfig({
       // ?sanity-preview=1 puts the site into draft-preview mode: it loads
       // unpublished (draft) content and shows click-to-edit overlays, so
       // edits can be checked on the real site before publishing.
+      // The apex domain redirects to www, so the canonical www origin is
+      // what the iframe actually reports — allow both.
+      allowOrigins: ['https://www.dknottphotography.in', 'https://dknottphotography.in'],
       previewUrl: {
-        initial: 'https://dknottphotography.in',
+        initial: 'https://www.dknottphotography.in',
         previewMode: {
           enable: '/?sanity-preview=1',
         },

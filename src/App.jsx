@@ -10,7 +10,6 @@ import Contact from './pages/Contact'
 import LinkTree from './pages/Index'
 import Universe from './pages/Universe'
 import { useSanityDoc } from './lib/useSanityDoc'
-import { sanityImg } from './lib/sanityContent'
 import { cloudinaryUrl } from './lib/cloudinary'
 import { commonImages } from './data/images'
 import { isPreviewMode } from './sanity'
@@ -124,7 +123,11 @@ function SiteTabTitle() {
       if (document.title !== t) document.title = t;
       // Tab icon follows the panel logo (Site Settings -> Brand -> Logo
       // Image), falling back to the built-in logo so the tab always shows it.
-      const icon = sanityImg(settings?.logo) || cloudinaryUrl(commonImages.logos.nav);
+      // Rendered as a round (circle-masked) icon.
+      const logoAsset = settings?.logo;
+      const icon = (logoAsset && typeof logoAsset === 'object' && logoAsset.public_id)
+        ? cloudinaryUrl(logoAsset.public_id, 'w_128,h_128,c_fill,r_max,f_png')
+        : cloudinaryUrl(commonImages.logos.nav, 'w_128,h_128,c_fill,r_max,f_png');
       if (icon) {
         let link = document.querySelector("link[rel~='icon']");
         if (!link) {

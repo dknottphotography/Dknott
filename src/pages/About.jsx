@@ -2004,7 +2004,7 @@ header.site-nav{
           <div style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 'clamp(0.75rem,2vw,2rem)' }}>
               {commonImages.instagram.map((img, i) => (
-                <a key={i} href="#" style={{ width: 'clamp(80px,14%,160px)', aspectRatio: '3/4', borderRadius: '4px', overflow: 'hidden', display: 'block' }}>
+                <a key={i} href={settings?.instagramUrl || 'https://www.instagram.com/dknottphotography'} target="_blank" rel="noopener noreferrer" style={{ width: 'clamp(80px,14%,160px)', aspectRatio: '3/4', borderRadius: '4px', overflow: 'hidden', display: 'block' }}>
                   <img src={cloudinaryUrl(img)} onError={handleImageError} className="w-full h-full object-cover rounded-sm" alt={`Instagram ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }} />
                 </a>
               ))}

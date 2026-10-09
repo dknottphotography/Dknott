@@ -1,9 +1,23 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import {presentationTool, defineLocations} from 'sanity/presentation'
 import {cloudinarySchemaPlugin} from 'sanity-plugin-cloudinary'
 import {schemaTypes} from './schemas'
 
 const SINGLETONS = ['siteSettings', 'homePage', 'contactPage', 'universePage', 'ourStoryPage', 'aboutPage', 'weddingFilmsPage', 'clientGuidePage', 'realWeddingsPage', 'linkTreePage']
+
+/**
+ * Where a page's content shows on the live website. Used by the Preview
+ * (Presentation) tool: opening a document can jump straight to the page
+ * it controls, and the site preview knows which document it is showing.
+ * Hrefs must match the routes in src/App.jsx.
+ */
+const pageLocation = (href: string, title: string) =>
+  defineLocations({
+    locations: [{title, href}],
+    message: 'Editing this document changes the page it controls on the website.',
+    tone: 'positive',
+  })
 
 export default defineConfig({
   name: 'default',
@@ -54,6 +68,32 @@ export default defineConfig({
               (listItem) => !SINGLETONS.includes(listItem.getId() as string)
             )
           ])
+    }),
+    presentationTool({
+      // Live website previewed inside the Studio. Opening it with
+      // ?sanity-preview=1 puts the site into draft-preview mode: it loads
+      // unpublished (draft) content and shows click-to-edit overlays, so
+      // edits can be checked on the real site before publishing.
+      previewUrl: {
+        initial: 'https://dknottphotography.in',
+        previewMode: {
+          enable: '/?sanity-preview=1',
+        },
+      },
+      resolve: {
+        locations: {
+          siteSettings: pageLocation('/', 'Site Settings (whole website)'),
+          homePage: pageLocation('/home', 'Home Page'),
+          aboutPage: pageLocation('/', 'About Us (opens as the home page)'),
+          ourStoryPage: pageLocation('/our_story', 'Our Story Page'),
+          contactPage: pageLocation('/contact', 'Contact Page'),
+          universePage: pageLocation('/universe', 'Universe Page'),
+          weddingFilmsPage: pageLocation('/wedding_films', 'Wedding Films Page'),
+          clientGuidePage: pageLocation('/client_guide', 'Client Guide Page'),
+          realWeddingsPage: pageLocation('/real_weddings', 'Real Weddings Page'),
+          linkTreePage: pageLocation('/index', 'Link Tree Page'),
+        },
+      },
     })
   ],
 
@@ -61,4 +101,3 @@ export default defineConfig({
     types: schemaTypes,
   },
 })
-

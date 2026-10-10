@@ -143,11 +143,65 @@ function SiteTabTitle() {
   return null;
 }
 
+/**
+ * Per-page browser title + search description, so each page can be found
+ * for its own search. The home page (/ and /about) keeps the panel's
+ * chosen tab title (Site Settings -> Browser Tab); other pages get their
+ * own label next to the brand name.
+ */
+const PAGE_META = {
+  '/home': { label: 'Home', description: 'Documentary wedding photography & films by DKNOTT Photography. 350+ weddings across India & abroad — candid, vibrant, honestly told.' },
+  '/our_story': { label: 'Our Story', description: 'Our story — how DKNOTT Photography began, and why we shoot weddings the honest, documentary way.' },
+  '/wedding_films': { label: 'Wedding Films', description: 'Wedding films by DKNOTT Photography — cinematic, honest films of your day, across India & abroad.' },
+  '/real_weddings': { label: 'Real Weddings', description: 'Real weddings by DKNOTT Photography — full stories, galleries and films from celebrations across India & abroad.' },
+  '/client_guide': { label: 'Client Guide', description: 'Client guide — what to expect when you book DKNOTT Photography for your wedding day.' },
+  '/contact': { label: 'Contact', description: 'Enquire about your date — contact DKNOTT Photography for documentary wedding photography & films across India & abroad.' },
+  '/universe': { label: 'Universe', description: 'DKNOTT Universe — an interactive gallery of our wedding photography.' },
+  '/index': { label: 'Links', description: 'All DKNOTT Photography links in one place.' },
+};
+
+const DEFAULT_DESCRIPTION = 'Documentary wedding photography & films by DKNOTT Photography. 350+ weddings across India & abroad — candid, vibrant, honestly told. Enquire about your date.';
+
+function RouteMeta() {
+  const { pathname } = useLocation();
+  const { data: settings } = useSanityDoc('siteSettings');
+
+  React.useEffect(() => {
+    try {
+      const brand = typeof settings?.title === 'string' && settings.title.trim()
+        ? stegaClean(settings.title).trim()
+        : 'DKNOTT Photography';
+      const meta = PAGE_META[pathname];
+      if (!meta) {
+        // Home (/ and /about): the panel's browser tab title rules, as before.
+        const t = typeof settings?.browserTabTitle === 'string' && settings.browserTabTitle.trim()
+          ? stegaClean(settings.browserTabTitle).trim()
+          : brand;
+        if (document.title !== t) document.title = t;
+      } else {
+        const t = `${meta.label} · ${brand}`;
+        if (document.title !== t) document.title = t;
+      }
+      const desc = meta?.description || DEFAULT_DESCRIPTION;
+      let tag = document.querySelector('meta[name="description"]');
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', 'description');
+        document.head.appendChild(tag);
+      }
+      if (tag.getAttribute('content') !== desc) tag.setAttribute('content', desc);
+    } catch (e) { /* never break rendering */ }
+  }, [pathname, settings]);
+
+  return null;
+}
+
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SiteTheme />
       <SiteTabTitle />
+      <RouteMeta />
       <ScrollToTop />
       {isPreviewMode && <PreviewVisualEditing />}
       <Routes>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import OurStory from './pages/OurStory'
 import About from './pages/About'
@@ -210,6 +210,7 @@ function App() {
         <Route path="/index" element={<LinkTree />} />
         <Route path="/home" element={<Home />} />
         <Route path="/our_story" element={<OurStory />} />
+        <Route path="/our-story" element={<Navigate to="/our_story" replace />} />
         <Route path="/wedding_films" element={<WeddingFilms />} />
         <Route path="/real_weddings" element={<RealWeddings />} />
         <Route path="/client_guide" element={<ClientGuide />} />

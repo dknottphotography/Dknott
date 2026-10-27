@@ -70,8 +70,16 @@ const LESSON_PILLARS = [
 export default function OurStory() {
   const { data } = useSanityDoc('ourStoryPage');
   const { data: settings } = useSanityDoc('siteSettings');
-  /* Split a Sanity multi-paragraph text field (blank-line separated) */
-  const paras = (text) => String(text || '').split(/\n\n+/).map((s) => s.trim()).filter(Boolean);
+  /* Split a Sanity multi-paragraph text field (blank-line separated).
+     The Sanity copy stores paragraph breaks as literal "\n" (backslash + n)
+     instead of real newlines — normalize those to real line breaks first,
+     otherwise the text never splits and raw "\n" renders on the page. */
+  const paras = (text) => String(text || '')
+    .replace(/\\r\\n/g, '\n')
+    .replace(/\\n/g, '\n')
+    .split(/\n\s*\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
   const paraOr = (arr, i, fallback) => (arr[i] !== undefined && arr[i] !== '' ? arr[i] : fallback);
   const journeyParas = paras(data?.journeyBody);
   const philosophyParas = paras(data?.philosophyBody);

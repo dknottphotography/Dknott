@@ -394,7 +394,10 @@ header.site-nav{
 .story-hero{
   position: relative;
   width: 100%;
-  min-height: 85vh;
+  /* Floor keeps the bottom-aligned hero content clear of the transparent
+     overlay header on short viewports — without it the eyebrow text rises
+     into the nav row and the two lines collide. */
+  min-height: max(85vh, 600px);
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -460,7 +463,7 @@ header.site-nav{
 }
 @media (max-width: 768px) {
   .story-hero {
-    min-height: 75vh;
+    min-height: max(75vh, 560px);
     padding-top: 105px;
     padding-bottom: 2.5rem;
   }

@@ -1608,7 +1608,7 @@ header.site-nav{
 .tracked-lg{ letter-spacing:0.28em; }
 
 /* scroll reveal */
-.reveal{ opacity:0; transform:translateY(16px); transition:opacity 0.75s ease, transform 0.75s ease; }
+.reveal{ opacity:0; transform:translateY(8px); transition:opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity:1; transform:translateY(0); }
 @media(prefers-reduced-motion:reduce){ .reveal{ opacity:1; transform:none; transition:none; } html{ scroll-behavior:auto; } }
       ` }} />
@@ -1638,6 +1638,7 @@ header.site-nav{
           src={heroSrc}
           onError={handleImageError}
           alt="DKNOTT Photography"
+          fetchpriority="high"
         />
         <div className="ab-hero-content">
           <h1 className="ab-hero-heading">{settings?.title || 'DKNOTT PHOTOGRAPHY'}</h1>
@@ -1657,7 +1658,7 @@ header.site-nav{
               />
             </div>
           </div>
-          <div className="reveal" style={{ transitionDelay: '0.12s' }}>
+          <div className="reveal">
             <div className="ab-about-content">
               <h2>{aboutTitle}</h2>
               <div className="ab-about-divider-line" />

@@ -685,7 +685,7 @@ header.site-nav{
 footer p{ margin: 0; }
 
 /* scroll reveal */
-.reveal{ opacity: 0; transform: translateY(18px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.reveal{ opacity: 0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity: 1; transform: none; transition: none; }
@@ -718,6 +718,7 @@ footer p{ margin: 0; }
           src={sanityImg(data?.heroImage) || STORY_IMAGES.hero}
           onError={handleImageError}
           alt="Davood behind the lens"
+          fetchpriority="high"
           className="story-hero-bg"
         />
         <div className="story-hero-content wrap">

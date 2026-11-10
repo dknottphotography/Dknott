@@ -698,7 +698,7 @@ footer.site-footer{
 }
 
 /* utility reveal animation, respects reduced motion */
-.reveal{ opacity:0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity:1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; transition:none; }

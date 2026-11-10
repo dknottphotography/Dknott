@@ -672,7 +672,7 @@ footer.site-footer{
 }
 
 /* utility reveal animation, respects reduced motion */
-.reveal{ opacity:0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity:1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; transition:none; }
@@ -738,6 +738,7 @@ footer.site-footer{
     src={sanityImg(data?.heroImage) || cloudinaryUrl(commonImages.heroes?.clientGuide || 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790349408/RSR_5653-2_1.jpg')}
     onError={handleImageError}
     alt="Client Guide Hero"
+    fetchpriority="high"
     className="client-hero-img object-[31%_center] md:object-[center_82%]"
   />
   <div className="hero-content wrap" style={{ position: "relative", zIndex: "2", color: "white", textShadow: "0 2px 10px rgba(0,0,0,0.6)", paddingBottom: "clamp(2rem, 4vw, 3.5rem)" }}>

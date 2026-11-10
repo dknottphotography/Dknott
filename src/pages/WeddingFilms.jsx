@@ -782,7 +782,7 @@ footer.site-footer{
 }
 
 /* utility reveal animation, respects reduced motion */
-.reveal{ opacity:0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity:1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; transition:none; }
@@ -906,7 +906,7 @@ footer.site-footer{
 </section>
 
 <section className="section tight" style={{paddingBottom: "0"}}>
-  <div className="wrap center reveal">
+  <div className="wrap center">
     <div className="pill-row" style={{justifyContent: "center", marginBottom: "0rem", paddingTop: "2rem"}}>
       <button className="pill active" data-filter="all">{data?.filterAllLabel || 'All Films'}</button>
       <button className="pill" data-filter="wedding">{data?.filterWeddingsLabel || 'Weddings'}</button>

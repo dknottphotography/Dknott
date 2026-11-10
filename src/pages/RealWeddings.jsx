@@ -910,7 +910,7 @@ footer.site-footer{
 }
 
 /* utility reveal animation, respects reduced motion */
-.reveal{ opacity:0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity:1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; transition:none; }
@@ -976,6 +976,7 @@ footer.site-footer{
     src={sanityImg(pageData?.heroImage) || cloudinaryUrl(commonImages.heroes.realWeddings || 'https://res.cloudinary.com/ddcwf9ji/image/upload/v1790350983/_ANV9169_1.jpg')}
     onError={handleImageError}
     alt="Real Weddings Hero"
+    fetchpriority="high"
     className="rw-hero-img absolute inset-0 w-full h-full object-cover object-[88%_center] md:object-center brightness-[0.9] z-0 transition-all duration-300"
   />
   <div className="absolute top-0 left-0 right-0 h-28 md:h-36 bg-gradient-to-b from-black/50 via-black/15 to-transparent z-[1] pointer-events-none" />
@@ -989,7 +990,7 @@ footer.site-footer{
 
 <section className="section tight">
   <div className="wrap">
-    <div className="pill-row reveal" style={{"marginBottom":"2.5rem"}}>
+    <div className="pill-row" style={{"marginBottom":"2.5rem"}}>
       <button className={`pill ${activeFilter === 'all' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'all')}>{pageData?.filterAllLabel || 'All'}</button>
       <button className={`pill ${activeFilter === 'destination' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'destination')}>{pageData?.filterDestinationLabel || 'Destination'}</button>
       <button className={`pill ${activeFilter === 'traditional' ? 'active' : ''}`} onClick={(e) => filterWeddings(e, 'traditional')}>{pageData?.filterTraditionalLabel || 'Traditional'}</button>

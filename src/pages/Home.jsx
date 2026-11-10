@@ -768,7 +768,7 @@ footer.site-footer{
 }
 
 /* utility reveal animation, respects reduced motion */
-.reveal{ opacity:0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .reveal.in{ opacity:1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; transition:none; }
@@ -877,6 +877,7 @@ footer.site-footer{
     src={homeData?.heroImage?.secure_url || cloudinaryUrl(commonImages.instagram[0])}
     onError={handleImageError}
     alt={homeData?.heroTitle || 'For the loved'}
+    fetchpriority="high"
     className="absolute inset-0 w-full h-full object-cover z-[-1] brightness-60"
     style={{ objectPosition: 'center top' }}
   />

@@ -212,10 +212,19 @@ function App() {
         <Route path="/our_story" element={<OurStory />} />
         <Route path="/our-story" element={<Navigate to="/our_story" replace />} />
         <Route path="/wedding_films" element={<WeddingFilms />} />
+        <Route path="/wedding-films" element={<Navigate to="/wedding_films" replace />} />
         <Route path="/real_weddings" element={<RealWeddings />} />
+        <Route path="/real-weddings" element={<Navigate to="/real_weddings" replace />} />
         <Route path="/client_guide" element={<ClientGuide />} />
+        <Route path="/client-guide" element={<Navigate to="/client_guide" replace />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/universe" element={<Universe />} />
+        {/* No standalone blog exists yet; the Blogs section points at Real
+            Weddings stories, so /blog lands there instead of a blank page. */}
+        <Route path="/blog" element={<Navigate to="/real_weddings" replace />} />
+        <Route path="/blogs" element={<Navigate to="/real_weddings" replace />} />
+        {/* Catch-all: an unknown URL must never render a blank page. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   )
